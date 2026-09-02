@@ -265,7 +265,7 @@ export default function CourseDetail() {
                 onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'rgba(70,162,57,0.12)'; (e.currentTarget as HTMLButtonElement).style.borderColor = '#46a239' }}
                 onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'rgba(70,162,57,0.06)'; (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(70,162,57,0.3)' }}>
                 <Building2 size={16} />
-                Solicitar para Empresa
+                Solicitar Treinamento para Empresa
               </button>
             </div>
           </div>
