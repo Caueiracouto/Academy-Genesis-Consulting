@@ -260,12 +260,6 @@ export default function CourseDetail() {
                 onMouseLeave={e => ((e.currentTarget as HTMLAnchorElement).style.backgroundColor = '#46a239')}>
                 Inscrever-se →
               </a>
-              <a href="https://br.genesisconsulting.com/treinamentos/" target="_blank" rel="noopener noreferrer"
-                style={{ display: 'block', textAlign: 'center', fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.82rem', fontWeight: 500, color: '#8f9c8f', padding: '0.65rem', border: '1px solid #3a3f3a', borderRadius: '12px', textDecoration: 'none', transition: 'all 0.2s' }}
-                onMouseEnter={e => ((e.currentTarget as HTMLAnchorElement).style.borderColor = '#46a239')}
-                onMouseLeave={e => ((e.currentTarget as HTMLAnchorElement).style.borderColor = '#3a3f3a')}>
-                Solicitar turma privada
-              </a>
               <button onClick={() => navigate(`/empresa/${course.slug}`)}
                 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', width: '100%', fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.82rem', fontWeight: 600, color: '#46a239', padding: '0.75rem', border: '1px solid rgba(70,162,57,0.3)', borderRadius: '12px', background: 'rgba(70,162,57,0.06)', cursor: 'pointer', transition: 'all 0.2s', marginTop: '0.75rem' }}
                 onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'rgba(70,162,57,0.12)'; (e.currentTarget as HTMLButtonElement).style.borderColor = '#46a239' }}
