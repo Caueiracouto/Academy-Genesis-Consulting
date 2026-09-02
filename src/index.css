@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --genesis-page: #030903;
+    --genesis-card: #242824;
+    --genesis-card-hover: #2d322d;
+    --genesis-border: #3a3f3a;
+    --genesis-border-subtle: #2a2e2a;
+    --genesis-brand: #46a239;
+    --genesis-brand-bright: #5ec04f;
+    --genesis-brand-dark: #2d6b25;
+    --genesis-text: #edf3ed;
+    --genesis-text-secondary: #8f9c8f;
+    --genesis-text-muted: #5a635a;
+    --genesis-gold: #d4a843;
+    --genesis-gold-bright: #e6c25a;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    background-color: var(--genesis-page);
+    color: var(--genesis-text);
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .bg-grid {
+    background-image:
+      linear-gradient(rgba(70, 162, 57, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(70, 162, 57, 0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  .animate-fade-up {
+    animation: fadeUp 0.7s ease-out both;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.9s ease-out both;
+  }
+
+  .animate-marquee {
+    animation: marquee 30s linear infinite;
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(70, 162, 57, 0.3); }
+  50% { box-shadow: 0 0 0 12px rgba(70, 162, 57, 0); }
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 2.5s ease-in-out infinite;
+}
