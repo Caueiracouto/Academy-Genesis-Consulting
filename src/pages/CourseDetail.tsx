@@ -45,8 +45,8 @@ export default function CourseDetail() {
           Voltar à Academy
         </button>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-          <img src="/image.png" alt="Genesis Consulting" style={{ width: 128, height: 'auto', display: 'block', backgroundColor: '#ffffff', borderRadius: '4px' }} />
-          <span style={{ fontFamily: 'Space Mono, monospace', fontSize: '0.55rem', letterSpacing: '0.22em', color: '#46a239', textTransform: 'uppercase', marginTop: '0.3rem' }}>Academy</span>
+          <span style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.95rem', fontWeight: 700, color: '#edf3ed' }}>Genesis</span>
+          <span style={{ fontFamily: 'Space Mono, monospace', fontSize: '0.55rem', letterSpacing: '0.22em', color: '#46a239', textTransform: 'uppercase' }}>Academy</span>
         </div>
       </nav>
 

@@ -173,9 +173,11 @@ export default function Academy() {
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-4"
         style={{ backgroundColor: 'rgba(3,9,3,0.85)', backdropFilter: 'blur(16px)', borderBottom: '1px solid rgba(70,162,57,0.12)' }}>
         <div className="flex items-center gap-3">
-          <div className="flex flex-col items-start">
-            <img src="/image.png" alt="Genesis Consulting" style={{ width: 142, height: 'auto', display: 'block', backgroundColor: '#ffffff', borderRadius: '4px' }} />
-            <span style={{ fontFamily: 'Space Mono, monospace', fontSize: '0.6rem', letterSpacing: '0.22em', color: '#46a239', textTransform: 'uppercase', marginTop: '0.3rem', paddingLeft: '0.1rem' }}>
+          <div className="flex flex-col">
+            <span style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '1.1rem', fontWeight: 700, letterSpacing: '-0.01em', color: '#edf3ed' }}>
+              Genesis Consulting
+            </span>
+            <span style={{ fontFamily: 'Space Mono, monospace', fontSize: '0.6rem', letterSpacing: '0.22em', color: '#46a239', textTransform: 'uppercase' }}>
               Academy
             </span>
           </div>
@@ -1104,8 +1106,8 @@ export default function Academy() {
       <footer className="px-8 py-10" style={{ borderTop: '1px solid #2a2e2a' }}>
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex flex-col items-center md:items-start">
-            <img src="/image.png" alt="Genesis Consulting" style={{ width: 128, height: 'auto', display: 'block', backgroundColor: '#ffffff', borderRadius: '4px' }} />
-            <span style={{ fontFamily: 'Space Mono, monospace', fontSize: '0.6rem', letterSpacing: '0.22em', color: '#46a239', textTransform: 'uppercase', marginTop: '0.3rem' }}>Academy</span>
+            <span style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '1rem', fontWeight: 700, color: '#edf3ed' }}>Genesis</span>
+            <span style={{ fontFamily: 'Space Mono, monospace', fontSize: '0.6rem', letterSpacing: '0.22em', color: '#46a239', textTransform: 'uppercase' }}>Academy</span>
           </div>
           <span style={{ fontFamily: 'Space Mono, monospace', fontSize: '0.7rem', color: '#5a635a', letterSpacing: '0.06em' }}>
             © 2025 Genesis Consulting. Todos os direitos reservados.
