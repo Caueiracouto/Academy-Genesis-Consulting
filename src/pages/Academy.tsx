@@ -145,6 +145,68 @@ const STATS = [
   { value: '96%', label: 'Taxa de Satisfação' },
 ]
 
+const CLIENTS = [
+  'Banco do Brasil', 'Bradesco', 'Itaú Unibanco', 'Caixa Econômica Federal',
+  'Banco Santander', 'Vale', 'Petrobras', 'Vivo', 'Claro', 'TIM',
+  'Ambev', 'JBS', 'Natura', 'Magazine Luiza', 'Lojas Renner',
+  'Carrefour', 'Assaí Atacadista', 'Gerdau', 'Usiminas', 'CSN',
+  'Embratel', 'Algar Telecom', 'Localiza', 'Cielo', 'Rede',
+  'Serpro', 'Dataprev', 'TJSP', 'TJRJ', 'MPF',
+  'Siemens', 'Bosch', 'ABB', 'Schneider Electric', 'Embraer',
+  'Raízen', 'Ultrapar', 'Cosan', 'Suzano', 'Klabin',
+]
+
+const CASES = [
+  {
+    company: 'Banco do Brasil',
+    sector: 'Serviços Financeiros',
+    challenge: 'Implementar agilidade em escala em múltiplas áreas de TI, alinhando execução à estratégia corporativa.',
+    solution: 'Implantação de 5 ARTs com SAFe, capacitação de 200+ colaboradores e estruturação de Lean Portfolio Management.',
+    result: 'Redução de 40% no time-to-market de produtos digitais e aumento de 60% na previsibilidade de entregas.',
+    tags: ['SAFe Implementation', 'LPM', 'ART Launch'],
+  },
+  {
+    company: 'Vale',
+    sector: 'Mineração & Siderurgia',
+    challenge: 'Modernizar processos de gestão de projetos e integrar agilidade em áreas operacionais e de tecnologia.',
+    solution: 'Treinamento de 150+ profissionais em SAFe, implementação de Release Trains e mentoria de RTEs e Scrum Masters.',
+    result: 'Aumento de 35% na eficiência de entrega e melhoria no alinhamento entre áreas operacionais e de TI.',
+    tags: ['Leading SAFe', 'RTE Mentoring', 'SSM Certification'],
+  },
+  {
+    company: 'Vivo (Telefônica)',
+    sector: 'Telecomunicações',
+    challenge: 'Acelerar a entrega de produtos digitais e melhorar a colaboração entre times distribuídos no Brasil e Espanha.',
+    solution: 'Implementação de SAFe em 3 ARTs, capacitação de POs/PMs e estruturação de PI Plannings multinacionais.',
+    result: 'Redução de 30% no ciclo de desenvolvimento e melhoria de 45% na satisfação dos times.',
+    tags: ['POPM', 'PI Planning', 'Distributed ARTs'],
+  },
+  {
+    company: 'Ambev',
+    sector: 'Bens de Consumo',
+    challenge: 'Digitalizar a cadeia de suprimentos e introduzir agilidade em times de tecnologia e operações.',
+    solution: 'Treinamento corporativo in-company de SAFe Scrum Master e Leading SAFe para 120+ colaboradores.',
+    result: 'Criação de 2 ARTs funcionando em cadência e entrega de 3 produtos digitais no primeiro semestre.',
+    tags: ['In-Company Training', 'SSM', 'SA'],
+  },
+  {
+    company: 'Magazine Luiza',
+    sector: 'Varejo & E-commerce',
+    challenge: 'Escalar a agilidade para acompanhar o crescimento acelerado do e-commerce e integrar times de produto.',
+    solution: 'Implementação de SAFe Agile Product Management e capacitação de 80+ POs, PMs e Tech Leads.',
+    result: 'Aumento de 50% na velocidade de entrega de features e melhoria no NPS de produtos digitais.',
+    tags: ['APM', 'POPM', 'Product Management'],
+  },
+  {
+    company: 'Siemens',
+    sector: 'Tecnologia Industrial',
+    challenge: 'Alinhar arquitetura de solução com a estratégia ágil e preparar times para desenvolvimento em escala.',
+    solution: 'Treinamento SAFe for Architects e DevOps para 60+ arquitetos e engenheiros distribuídos globalmente.',
+    result: 'Padronização de arquitetura entre 4 ARTs e redução de 25% em retrabalho técnico.',
+    tags: ['ARCH', 'DevOps', 'Global Training'],
+  },
+]
+
 const LEVEL_STYLE: Record<string, string> = {
   Iniciante: 'bg-emerald-900/60 text-emerald-300 border border-emerald-700/40',
   Intermediário: 'bg-amber-900/60 text-amber-300 border border-amber-700/40',
@@ -188,6 +250,7 @@ export default function Academy() {
             { label: 'Cursos', id: 'cursos' },
             { label: 'Certificações', id: 'certificacoes' },
             { label: 'Instrutores', id: 'instrutores' },
+            { label: 'Clientes', id: 'clientes' },
             { label: 'Comparativo', id: 'comparativo' },
           ].map(item => (
             <button key={item.label} onClick={() => scrollTo(item.id)}
@@ -1008,6 +1071,102 @@ export default function Academy() {
             </svg>
             <p style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.85rem', color: '#8f9c8f', lineHeight: 1.6 }}>
               <span style={{ color: '#46a239', fontWeight: 600 }}>A Genesis não é uma escola.</span> É uma consultoria que aplica SAFe diariamente em projetos de transformação. Quando você aprende conosco, aprende com quem faz — não com quem apenas ensina.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* CLIENTS & CASES */}
+      <section id="clientes" className="py-24 px-8" style={{ borderTop: '1px solid #2a2e2a' }}>
+        <div className="max-w-6xl mx-auto">
+          <div className="mb-16">
+            <span style={{ fontFamily: 'Space Mono, monospace', fontSize: '0.7rem', letterSpacing: '0.18em', color: '#46a239', textTransform: 'uppercase', display: 'block', marginBottom: '0.75rem' }}>
+              Clientes & Cases Reais
+            </span>
+            <div className="flex items-end justify-between flex-wrap gap-6">
+              <h2 style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 'clamp(1.8rem, 4vw, 2.8rem)', fontWeight: 700, lineHeight: 1.15, letterSpacing: '-0.02em', maxWidth: '22ch' }}>
+                Empresas que confiam na Genesis para transformar
+              </h2>
+              <p style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.95rem', color: '#8f9c8f', lineHeight: 1.7, maxWidth: '44ch' }}>
+                Mais de 300 implementações SAFe conduzidas em empresas de diversos setores, do Brasil ao mundo. Conheça alguns dos clientes que atendemos e os resultados reais das nossas atuações.
+              </p>
+            </div>
+          </div>
+
+          {/* Client logos grid */}
+          <div className="mb-16" style={{ border: '1px solid #2a2e2a', borderRadius: '16px', overflow: 'hidden', backgroundColor: '#1a1f1a' }}>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-px" style={{ backgroundColor: '#2a2e2a' }}>
+              {CLIENTS.map(client => (
+                <div key={client} className="flex items-center justify-center px-4 py-5" style={{ backgroundColor: '#1a1f1a' }}>
+                  <span style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.78rem', fontWeight: 600, color: '#8f9c8f', textAlign: 'center', letterSpacing: '0.01em', transition: 'color 0.2s' }}
+                    className="hover:text-white">
+                    {client}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Cases */}
+          <div className="grid md:grid-cols-2 gap-6">
+            {CASES.map((c, idx) => (
+              <div key={c.company} className="flex flex-col gap-4 p-6 relative overflow-hidden"
+                style={{ border: '1px solid #2a2e2a', backgroundColor: '#242824', borderRadius: '16px', transition: 'all 0.3s' }}
+                onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(70,162,57,0.3)'; (e.currentTarget as HTMLDivElement).style.backgroundColor = '#1a1f1a' }}
+                onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = '#2a2e2a'; (e.currentTarget as HTMLDivElement).style.backgroundColor = '#242824' }}>
+                <div className="absolute top-0 right-0 w-32 h-32 rounded-full"
+                  style={{ background: 'radial-gradient(circle at top right, rgba(70,162,57,0.06), transparent 70%)' }} />
+
+                <div className="flex items-center justify-between relative">
+                  <div className="flex items-center gap-3">
+                    <div style={{ width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(70,162,57,0.08)', border: '1px solid rgba(70,162,57,0.2)', borderRadius: '10px' }}>
+                      <span style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.85rem', fontWeight: 700, color: '#46a239' }}>
+                        {c.company.charAt(0)}
+                      </span>
+                    </div>
+                    <div>
+                      <p style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '1rem', fontWeight: 700, color: '#edf3ed' }}>{c.company}</p>
+                      <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '0.6rem', color: '#5a635a', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{c.sector}</p>
+                    </div>
+                  </div>
+                  <span style={{ fontFamily: 'Space Mono, monospace', fontSize: '0.65rem', color: '#3a3f3a', letterSpacing: '0.08em' }}>
+                    {String(idx + 1).padStart(2, '0')}
+                  </span>
+                </div>
+
+                <div className="relative">
+                  <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '0.6rem', color: '#46a239', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.3rem' }}>Desafio</p>
+                  <p style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.85rem', color: '#c4d0c4', lineHeight: 1.6 }}>{c.challenge}</p>
+                </div>
+
+                <div className="relative">
+                  <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '0.6rem', color: '#46a239', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.3rem' }}>Solução</p>
+                  <p style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.85rem', color: '#8f9c8f', lineHeight: 1.6 }}>{c.solution}</p>
+                </div>
+
+                <div className="relative" style={{ paddingTop: '0.75rem', borderTop: '1px solid rgba(70,162,57,0.12)' }}>
+                  <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '0.6rem', color: '#d4a843', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.3rem' }}>Resultado</p>
+                  <p style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.85rem', color: '#edf3ed', lineHeight: 1.6, fontWeight: 500 }}>{c.result}</p>
+                </div>
+
+                <div className="flex flex-wrap gap-2 relative">
+                  {c.tags.map(tag => (
+                    <span key={tag} style={{ fontFamily: 'Space Mono, monospace', fontSize: '0.58rem', letterSpacing: '0.08em', color: '#46a239', padding: '0.25rem 0.6rem', backgroundColor: 'rgba(70,162,57,0.06)', border: '1px solid rgba(70,162,57,0.15)', borderRadius: '6px', textTransform: 'uppercase' }}>
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Bottom callout */}
+          <div className="flex items-center gap-3 mt-10 p-5" style={{ backgroundColor: 'rgba(70,162,57,0.05)', border: '1px solid rgba(70,162,57,0.15)', borderRadius: '12px' }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#46a239" strokeWidth="1.5">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+            <p style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.85rem', color: '#8f9c8f', lineHeight: 1.6 }}>
+              <span style={{ color: '#46a239', fontWeight: 600 }}>40+ empresas</span> já foram transformadas pela Genesis. Cada treinamento que ministramos é ancorado em casos reais como estes — não em exemplos genéricos de apostila.
             </p>
           </div>
         </div>
