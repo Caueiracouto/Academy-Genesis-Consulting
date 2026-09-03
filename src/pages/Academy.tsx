@@ -145,20 +145,9 @@ const STATS = [
   { value: '96%', label: 'Taxa de Satisfação' },
 ]
 
-const CLIENTS = [
-  'Banco do Brasil', 'Bradesco', 'Itaú Unibanco', 'Caixa Econômica Federal',
-  'Banco Santander', 'Vale', 'Petrobras', 'Vivo', 'Claro', 'TIM',
-  'Ambev', 'JBS', 'Natura', 'Magazine Luiza', 'Lojas Renner',
-  'Carrefour', 'Assaí Atacadista', 'Gerdau', 'Usiminas', 'CSN',
-  'Embratel', 'Algar Telecom', 'Localiza', 'Cielo', 'Rede',
-  'Serpro', 'Dataprev', 'TJSP', 'TJRJ', 'MPF',
-  'Siemens', 'Bosch', 'ABB', 'Schneider Electric', 'Embraer',
-  'Raízen', 'Ultrapar', 'Cosan', 'Suzano', 'Klabin',
-]
-
 const CASES = [
   {
-    company: 'Banco do Brasil',
+    company: 'Instituição Financeira de Grande Porte',
     sector: 'Serviços Financeiros',
     challenge: 'Implementar agilidade em escala em múltiplas áreas de TI, alinhando execução à estratégia corporativa.',
     solution: 'Implantação de 5 ARTs com SAFe, capacitação de 200+ colaboradores e estruturação de Lean Portfolio Management.',
@@ -166,7 +155,7 @@ const CASES = [
     tags: ['SAFe Implementation', 'LPM', 'ART Launch'],
   },
   {
-    company: 'Vale',
+    company: 'Companhia de Mineração e Siderurgia',
     sector: 'Mineração & Siderurgia',
     challenge: 'Modernizar processos de gestão de projetos e integrar agilidade em áreas operacionais e de tecnologia.',
     solution: 'Treinamento de 150+ profissionais em SAFe, implementação de Release Trains e mentoria de RTEs e Scrum Masters.',
@@ -174,7 +163,7 @@ const CASES = [
     tags: ['Leading SAFe', 'RTE Mentoring', 'SSM Certification'],
   },
   {
-    company: 'Vivo (Telefônica)',
+    company: 'Operadora de Telecomunicações',
     sector: 'Telecomunicações',
     challenge: 'Acelerar a entrega de produtos digitais e melhorar a colaboração entre times distribuídos no Brasil e Espanha.',
     solution: 'Implementação de SAFe em 3 ARTs, capacitação de POs/PMs e estruturação de PI Plannings multinacionais.',
@@ -182,7 +171,7 @@ const CASES = [
     tags: ['POPM', 'PI Planning', 'Distributed ARTs'],
   },
   {
-    company: 'Ambev',
+    company: 'Indústria de Bens de Consumo',
     sector: 'Bens de Consumo',
     challenge: 'Digitalizar a cadeia de suprimentos e introduzir agilidade em times de tecnologia e operações.',
     solution: 'Treinamento corporativo in-company de SAFe Scrum Master e Leading SAFe para 120+ colaboradores.',
@@ -190,7 +179,7 @@ const CASES = [
     tags: ['In-Company Training', 'SSM', 'SA'],
   },
   {
-    company: 'Magazine Luiza',
+    company: 'Varejista Nacional de Grande Porte',
     sector: 'Varejo & E-commerce',
     challenge: 'Escalar a agilidade para acompanhar o crescimento acelerado do e-commerce e integrar times de produto.',
     solution: 'Implementação de SAFe Agile Product Management e capacitação de 80+ POs, PMs e Tech Leads.',
@@ -198,7 +187,7 @@ const CASES = [
     tags: ['APM', 'POPM', 'Product Management'],
   },
   {
-    company: 'Siemens',
+    company: 'Grupo Industrial Multinacional',
     sector: 'Tecnologia Industrial',
     challenge: 'Alinhar arquitetura de solução com a estratégia ágil e preparar times para desenvolvimento em escala.',
     solution: 'Treinamento SAFe for Architects e DevOps para 60+ arquitetos e engenheiros distribuídos globalmente.',
@@ -1088,22 +1077,8 @@ export default function Academy() {
                 Empresas que confiam na Genesis para transformar
               </h2>
               <p style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.95rem', color: '#8f9c8f', lineHeight: 1.7, maxWidth: '44ch' }}>
-                Mais de 300 implementações SAFe conduzidas em empresas de diversos setores, do Brasil ao mundo. Conheça alguns dos clientes que atendemos e os resultados reais das nossas atuações.
+                Mais de 300 implementações SAFe conduzidas em empresas de diversos setores, do Brasil ao mundo. Conheça alguns dos cases reais das nossas atuações — com os resultados obtidos por cada cliente.
               </p>
-            </div>
-          </div>
-
-          {/* Client logos grid */}
-          <div className="mb-16" style={{ border: '1px solid #2a2e2a', borderRadius: '16px', overflow: 'hidden', backgroundColor: '#1a1f1a' }}>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-px" style={{ backgroundColor: '#2a2e2a' }}>
-              {CLIENTS.map(client => (
-                <div key={client} className="flex items-center justify-center px-4 py-5" style={{ backgroundColor: '#1a1f1a' }}>
-                  <span style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.78rem', fontWeight: 600, color: '#8f9c8f', textAlign: 'center', letterSpacing: '0.01em', transition: 'color 0.2s' }}
-                    className="hover:text-white">
-                    {client}
-                  </span>
-                </div>
-              ))}
             </div>
           </div>
 
@@ -1166,7 +1141,7 @@ export default function Academy() {
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
             </svg>
             <p style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.85rem', color: '#8f9c8f', lineHeight: 1.6 }}>
-              <span style={{ color: '#46a239', fontWeight: 600 }}>40+ empresas</span> já foram transformadas pela Genesis. Cada treinamento que ministramos é ancorado em casos reais como estes — não em exemplos genéricos de apostila.
+              <span style={{ color: '#46a239', fontWeight: 600 }}>Cada treinamento</span> que ministramos é ancorado em casos reais como estes — não em exemplos genéricos de apostila.
             </p>
           </div>
         </div>
