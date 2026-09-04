@@ -239,8 +239,8 @@ export default function Academy() {
             { label: 'Cursos', id: 'cursos' },
             { label: 'Certificações', id: 'certificacoes' },
             { label: 'Instrutores', id: 'instrutores' },
-            { label: 'Clientes', id: 'clientes' },
             { label: 'Comparativo', id: 'comparativo' },
+            { label: 'Clientes', id: 'clientes' },
           ].map(item => (
             <button key={item.label} onClick={() => scrollTo(item.id)}
               style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.85rem', fontWeight: 500, color: '#8f9c8f', letterSpacing: '0.02em', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
