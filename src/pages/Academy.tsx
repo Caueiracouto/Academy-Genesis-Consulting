@@ -197,66 +197,78 @@ const CASES = [
 ]
 
 const CLIENT_LOGOS = [
-  { name: 'Banco do Brasil', initials: 'BB', color: '#F7C800' },
-  { name: 'Bradesco', initials: 'Br', color: '#CC092F' },
-  { name: 'Itaú Unibanco', initials: 'It', color: '#EC700C' },
-  { name: 'Caixa', initials: 'Cx', color: '#0066B3' },
-  { name: 'Santander', initials: 'Sa', color: '#EC0000' },
-  { name: 'Vale', initials: 'Va', color: '#2D6E3E' },
-  { name: 'Petrobras', initials: 'Pe', color: '#00A859' },
-  { name: 'Vivo', initials: 'Vi', color: '#660099' },
-  { name: 'Claro', initials: 'Cl', color: '#DA291C' },
-  { name: 'TIM', initials: 'Ti', color: '#0046AD' },
-  { name: 'Ambev', initials: 'Am', color: '#00A19A' },
-  { name: 'JBS', initials: 'JB', color: '#E2231A' },
-  { name: 'Natura', initials: 'Na', color: '#C5007A' },
-  { name: 'Magalu', initials: 'Mg', color: '#0086FF' },
-  { name: 'Renner', initials: 'Re', color: '#D9A600' },
-  { name: 'Carrefour', initials: 'Ca', color: '#195CAA' },
-  { name: 'Assaí', initials: 'As', color: '#E2001A' },
-  { name: 'Gerdau', initials: 'Ge', color: '#00529B' },
-  { name: 'Usiminas', initials: 'Us', color: '#003D7A' },
-  { name: 'CSN', initials: 'CS', color: '#1A1A1A' },
-  { name: 'Embratel', initials: 'Em', color: '#FF6600' },
-  { name: 'Algar', initials: 'Al', color: '#00529C' },
-  { name: 'Localiza', initials: 'Lo', color: '#009C3D' },
-  { name: 'Cielo', initials: 'Ci', color: '#003F87' },
-  { name: 'Rede', initials: 'Rd', color: '#E60012' },
-  { name: 'Serpro', initials: 'Se', color: '#0066B3' },
-  { name: 'Dataprev', initials: 'Dp', color: '#1B5E20' },
-  { name: 'TJSP', initials: 'TJ', color: '#8B0000' },
-  { name: 'TJRJ', initials: 'RJ', color: '#003366' },
-  { name: 'MPF', initials: 'MP', color: '#2E7D32' },
-  { name: 'Siemens', initials: 'Si', color: '#009999' },
-  { name: 'Bosch', initials: 'Bo', color: '#ED1C24' },
-  { name: 'ABB', initials: 'AB', color: '#FF000F' },
-  { name: 'Schneider', initials: 'Sc', color: '#3DCD58' },
-  { name: 'Embraer', initials: 'Eb', color: '#0A1F44' },
-  { name: 'Raízen', initials: 'Ra', color: '#0066B3' },
-  { name: 'Ultrapar', initials: 'Ul', color: '#00529B' },
-  { name: 'Cosan', initials: 'Co', color: '#0066CC' },
-  { name: 'Suzano', initials: 'Su', color: '#0066B3' },
-  { name: 'Klabin', initials: 'Kl', color: '#0066B3' },
+  { name: 'Banco do Brasil', initials: 'BB', color: '#F7C800', domain: 'bb.com.br' },
+  { name: 'Bradesco', initials: 'Br', color: '#CC092F', domain: 'bradesco.com.br' },
+  { name: 'Itaú Unibanco', initials: 'It', color: '#EC700C', domain: 'itau.com.br' },
+  { name: 'Caixa', initials: 'Cx', color: '#0066B3', domain: 'caixa.gov.br' },
+  { name: 'Santander', initials: 'Sa', color: '#EC0000', domain: 'santander.com.br' },
+  { name: 'Vale', initials: 'Va', color: '#2D6E3E', domain: 'vale.com' },
+  { name: 'Petrobras', initials: 'Pe', color: '#00A859', domain: 'petrobras.com.br' },
+  { name: 'Vivo', initials: 'Vi', color: '#660099', domain: 'vivo.com.br' },
+  { name: 'Claro', initials: 'Cl', color: '#DA291C', domain: 'claro.com.br' },
+  { name: 'TIM', initials: 'Ti', color: '#0046AD', domain: 'tim.com.br' },
+  { name: 'Ambev', initials: 'Am', color: '#00A19A', domain: 'ambev.com.br' },
+  { name: 'JBS', initials: 'JB', color: '#E2231A', domain: 'jbs.com.br' },
+  { name: 'Natura', initials: 'Na', color: '#C5007A', domain: 'natura.com.br' },
+  { name: 'Magalu', initials: 'Mg', color: '#0086FF', domain: 'magazineluiza.com.br' },
+  { name: 'Renner', initials: 'Re', color: '#D9A600', domain: 'lojasrenner.com.br' },
+  { name: 'Carrefour', initials: 'Ca', color: '#195CAA', domain: 'carrefour.com.br' },
+  { name: 'Assaí', initials: 'As', color: '#E2001A', domain: 'assai.com.br' },
+  { name: 'Gerdau', initials: 'Ge', color: '#00529B', domain: 'gerdau.com.br' },
+  { name: 'Usiminas', initials: 'Us', color: '#003D7A', domain: 'usiminas.com' },
+  { name: 'CSN', initials: 'CS', color: '#1A1A1A', domain: 'csn.com.br' },
+  { name: 'Embratel', initials: 'Em', color: '#FF6600', domain: 'embratel.com.br' },
+  { name: 'Algar', initials: 'Al', color: '#00529C', domain: 'algartelecom.com.br' },
+  { name: 'Localiza', initials: 'Lo', color: '#009C3D', domain: 'localiza.com.br' },
+  { name: 'Cielo', initials: 'Ci', color: '#003F87', domain: 'cielo.com.br' },
+  { name: 'Rede', initials: 'Rd', color: '#E60012', domain: 'userede.com.br' },
+  { name: 'Serpro', initials: 'Se', color: '#0066B3', domain: 'serpro.gov.br' },
+  { name: 'Dataprev', initials: 'Dp', color: '#1B5E20', domain: 'dataprev.gov.br' },
+  { name: 'TJSP', initials: 'TJ', color: '#8B0000', domain: 'tjsp.jus.br' },
+  { name: 'TJRJ', initials: 'RJ', color: '#003366', domain: 'tjrj.jus.br' },
+  { name: 'MPF', initials: 'MP', color: '#2E7D32', domain: 'mpf.mp.br' },
+  { name: 'Siemens', initials: 'Si', color: '#009999', domain: 'siemens.com' },
+  { name: 'Bosch', initials: 'Bo', color: '#ED1C24', domain: 'bosch.com.br' },
+  { name: 'ABB', initials: 'AB', color: '#FF000F', domain: 'abb.com' },
+  { name: 'Schneider', initials: 'Sc', color: '#3DCD58', domain: 'se.com' },
+  { name: 'Embraer', initials: 'Eb', color: '#0A1F44', domain: 'embraer.com' },
+  { name: 'Raízen', initials: 'Ra', color: '#0066B3', domain: 'raizen.com.br' },
+  { name: 'Ultrapar', initials: 'Ul', color: '#00529B', domain: 'ultra.com.br' },
+  { name: 'Cosan', initials: 'Co', color: '#0066CC', domain: 'cosan.com.br' },
+  { name: 'Suzano', initials: 'Su', color: '#0066B3', domain: 'suzano.com.br' },
+  { name: 'Klabin', initials: 'Kl', color: '#0066B3', domain: 'klabin.com.br' },
 ]
 
-function ClientLogoCard({ name, initials, color }: { name: string; initials: string; color: string }) {
+function ClientLogoCard({ name, initials, color, domain }: { name: string; initials: string; color: string; domain: string }) {
+  const [imgError, setImgError] = useState(false)
+  const logoUrl = `https://logo.clearbit.com/${domain}?size=128`
+
   return (
     <div className="flex flex-col items-center gap-3 flex-shrink-0" style={{ width: 160 }}>
       <div className="flex items-center justify-center" style={{ width: 80, height: 80, borderRadius: '16px', backgroundColor: '#1a1f1a', border: '1px solid #2a2e2a', overflow: 'hidden', position: 'relative' }}>
-        <div style={{
-          width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center',
-          background: `linear-gradient(135deg, ${color}18, ${color}08)`,
-        }}>
-          <span style={{
-            fontFamily: 'Plus Jakarta Sans, sans-serif',
-            fontSize: '1.6rem',
-            fontWeight: 800,
-            color: color,
-            letterSpacing: '-0.02em',
+        {imgError ? (
+          <div style={{
+            width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            background: `linear-gradient(135deg, ${color}18, ${color}08)`,
           }}>
-            {initials}
-          </span>
-        </div>
+            <span style={{
+              fontFamily: 'Plus Jakarta Sans, sans-serif',
+              fontSize: '1.6rem',
+              fontWeight: 800,
+              color: color,
+              letterSpacing: '-0.02em',
+            }}>
+              {initials}
+            </span>
+          </div>
+        ) : (
+          <img
+            src={logoUrl}
+            alt={name}
+            onError={() => setImgError(true)}
+            style={{ maxWidth: '70%', maxHeight: '70%', objectFit: 'contain', filter: 'grayscale(0.2) brightness(1.1)' }}
+          />
+        )}
       </div>
       <span style={{
         fontFamily: 'Plus Jakarta Sans, sans-serif',
@@ -321,7 +333,7 @@ function ClientCarousel() {
         onMouseLeave={() => setPaused(false)}
       >
         {doubled.map((logo, i) => (
-          <ClientLogoCard key={`${logo.name}-${i}`} name={logo.name} initials={logo.initials} color={logo.color} />
+          <ClientLogoCard key={`${logo.name}-${i}`} name={logo.name} initials={logo.initials} color={logo.color} domain={logo.domain} />
         ))}
       </div>
     </div>
