@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { COURSES, CATEGORIES } from '@/data/courses'
 
@@ -195,6 +195,138 @@ const CASES = [
     tags: ['ARCH', 'DevOps', 'Global Training'],
   },
 ]
+
+const CLIENT_LOGOS = [
+  { name: 'Banco do Brasil', initials: 'BB', color: '#F7C800' },
+  { name: 'Bradesco', initials: 'Br', color: '#CC092F' },
+  { name: 'Itaú Unibanco', initials: 'It', color: '#EC700C' },
+  { name: 'Caixa', initials: 'Cx', color: '#0066B3' },
+  { name: 'Santander', initials: 'Sa', color: '#EC0000' },
+  { name: 'Vale', initials: 'Va', color: '#2D6E3E' },
+  { name: 'Petrobras', initials: 'Pe', color: '#00A859' },
+  { name: 'Vivo', initials: 'Vi', color: '#660099' },
+  { name: 'Claro', initials: 'Cl', color: '#DA291C' },
+  { name: 'TIM', initials: 'Ti', color: '#0046AD' },
+  { name: 'Ambev', initials: 'Am', color: '#00A19A' },
+  { name: 'JBS', initials: 'JB', color: '#E2231A' },
+  { name: 'Natura', initials: 'Na', color: '#C5007A' },
+  { name: 'Magalu', initials: 'Mg', color: '#0086FF' },
+  { name: 'Renner', initials: 'Re', color: '#D9A600' },
+  { name: 'Carrefour', initials: 'Ca', color: '#195CAA' },
+  { name: 'Assaí', initials: 'As', color: '#E2001A' },
+  { name: 'Gerdau', initials: 'Ge', color: '#00529B' },
+  { name: 'Usiminas', initials: 'Us', color: '#003D7A' },
+  { name: 'CSN', initials: 'CS', color: '#1A1A1A' },
+  { name: 'Embratel', initials: 'Em', color: '#FF6600' },
+  { name: 'Algar', initials: 'Al', color: '#00529C' },
+  { name: 'Localiza', initials: 'Lo', color: '#009C3D' },
+  { name: 'Cielo', initials: 'Ci', color: '#003F87' },
+  { name: 'Rede', initials: 'Rd', color: '#E60012' },
+  { name: 'Serpro', initials: 'Se', color: '#0066B3' },
+  { name: 'Dataprev', initials: 'Dp', color: '#1B5E20' },
+  { name: 'TJSP', initials: 'TJ', color: '#8B0000' },
+  { name: 'TJRJ', initials: 'RJ', color: '#003366' },
+  { name: 'MPF', initials: 'MP', color: '#2E7D32' },
+  { name: 'Siemens', initials: 'Si', color: '#009999' },
+  { name: 'Bosch', initials: 'Bo', color: '#ED1C24' },
+  { name: 'ABB', initials: 'AB', color: '#FF000F' },
+  { name: 'Schneider', initials: 'Sc', color: '#3DCD58' },
+  { name: 'Embraer', initials: 'Eb', color: '#0A1F44' },
+  { name: 'Raízen', initials: 'Ra', color: '#0066B3' },
+  { name: 'Ultrapar', initials: 'Ul', color: '#00529B' },
+  { name: 'Cosan', initials: 'Co', color: '#0066CC' },
+  { name: 'Suzano', initials: 'Su', color: '#0066B3' },
+  { name: 'Klabin', initials: 'Kl', color: '#0066B3' },
+]
+
+function ClientLogoCard({ name, initials, color }: { name: string; initials: string; color: string }) {
+  return (
+    <div className="flex flex-col items-center gap-3 flex-shrink-0" style={{ width: 160 }}>
+      <div className="flex items-center justify-center" style={{ width: 80, height: 80, borderRadius: '16px', backgroundColor: '#1a1f1a', border: '1px solid #2a2e2a', overflow: 'hidden', position: 'relative' }}>
+        <div style={{
+          width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+          background: `linear-gradient(135deg, ${color}18, ${color}08)`,
+        }}>
+          <span style={{
+            fontFamily: 'Plus Jakarta Sans, sans-serif',
+            fontSize: '1.6rem',
+            fontWeight: 800,
+            color: color,
+            letterSpacing: '-0.02em',
+          }}>
+            {initials}
+          </span>
+        </div>
+      </div>
+      <span style={{
+        fontFamily: 'Plus Jakarta Sans, sans-serif',
+        fontSize: '0.72rem',
+        fontWeight: 500,
+        color: '#8f9c8f',
+        textAlign: 'center',
+        lineHeight: 1.3,
+        maxWidth: '100%',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+      }}>
+        {name}
+      </span>
+    </div>
+  )
+}
+
+function ClientCarousel() {
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const [paused, setPaused] = useState(false)
+
+  useEffect(() => {
+    const el = scrollRef.current
+    if (!el) return
+    let raf: number
+    let start = performance.now()
+    const speed = 40
+
+    const tick = (now: number) => {
+      if (el) {
+        if (paused) {
+          start = now - (el.scrollLeft / speed) * 1000
+        } else {
+          const elapsed = now - start
+          const delta = (elapsed / 1000) * speed
+          el.scrollLeft = delta % (el.scrollWidth / 2)
+        }
+      }
+      raf = requestAnimationFrame(tick)
+    }
+    raf = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf)
+  }, [paused])
+
+  const doubled = [...CLIENT_LOGOS, ...CLIENT_LOGOS]
+
+  return (
+    <div
+      className="relative overflow-hidden"
+      style={{
+        maskImage: 'linear-gradient(to right, transparent, black 8%, black 92%, transparent)',
+        WebkitMaskImage: 'linear-gradient(to right, transparent, black 8%, black 92%, transparent)',
+      }}
+    >
+      <div
+        ref={scrollRef}
+        className="flex gap-6 overflow-hidden"
+        style={{ scrollBehavior: 'auto' }}
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+      >
+        {doubled.map((logo, i) => (
+          <ClientLogoCard key={`${logo.name}-${i}`} name={logo.name} initials={logo.initials} color={logo.color} />
+        ))}
+      </div>
+    </div>
+  )
+}
 
 const LEVEL_STYLE: Record<string, string> = {
   Iniciante: 'bg-emerald-900/60 text-emerald-300 border border-emerald-700/40',
@@ -1080,6 +1212,20 @@ export default function Academy() {
                 Mais de 300 implementações SAFe conduzidas em empresas de diversos setores, do Brasil ao mundo. Conheça alguns dos cases reais das nossas atuações — com os resultados obtidos por cada cliente.
               </p>
             </div>
+          </div>
+
+          {/* Digital scrolling logo panel */}
+          <div className="mb-16">
+            <div className="flex items-center gap-3 mb-6">
+              <span style={{ fontFamily: 'Space Mono, monospace', fontSize: '0.6rem', letterSpacing: '0.14em', color: '#46a239', textTransform: 'uppercase' }}>
+                Painel de Clientes
+              </span>
+              <div style={{ flex: 1, height: 1, backgroundColor: '#2a2e2a' }} />
+              <span style={{ fontFamily: 'Space Mono, monospace', fontSize: '0.6rem', color: '#5a635a', letterSpacing: '0.08em' }}>
+                {CLIENT_LOGOS.length} empresas
+              </span>
+            </div>
+            <ClientCarousel />
           </div>
 
           {/* Cases */}
