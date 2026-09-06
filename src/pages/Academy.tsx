@@ -303,30 +303,60 @@ function ClientLogoCard({ name, initials, color, domain }: { name: string; initi
 
 function ClientCarousel() {
   const scrollRef = useRef<HTMLDivElement>(null)
-  const [paused, setPaused] = useState(false)
+  const [isDragging, setIsDragging] = useState(false)
+  const dragState = useRef({ startX: 0, startScrollLeft: 0, hasMoved: false })
+  const autoState = useRef({ offset: 0, lastTime: 0 })
 
   useEffect(() => {
     const el = scrollRef.current
     if (!el) return
     let raf: number
-    let start = performance.now()
     const speed = 40
+    autoState.current.lastTime = performance.now()
 
     const tick = (now: number) => {
-      if (el) {
-        if (paused) {
-          start = now - (el.scrollLeft / speed) * 1000
-        } else {
-          const elapsed = now - start
-          const delta = (elapsed / 1000) * speed
-          el.scrollLeft = delta % (el.scrollWidth / 2)
-        }
+      if (el && !isDragging) {
+        const dt = (now - autoState.current.lastTime) / 1000
+        autoState.current.offset += dt * speed
+        const half = el.scrollWidth / 2
+        el.scrollLeft = autoState.current.offset % half
       }
+      autoState.current.lastTime = now
       raf = requestAnimationFrame(tick)
     }
     raf = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(raf)
-  }, [paused])
+  }, [isDragging])
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    const el = scrollRef.current
+    if (!el) return
+    setIsDragging(true)
+    dragState.current = {
+      startX: e.clientX,
+      startScrollLeft: el.scrollLeft,
+      hasMoved: false,
+    }
+    autoState.current.offset = el.scrollLeft
+  }
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging) return
+    const el = scrollRef.current
+    if (!el) return
+    const dx = e.clientX - dragState.current.startX
+    if (Math.abs(dx) > 3) dragState.current.hasMoved = true
+    el.scrollLeft = dragState.current.startScrollLeft - dx
+    autoState.current.offset = el.scrollLeft
+  }
+
+  const handleEnd = () => {
+    if (isDragging) {
+      setIsDragging(false)
+      const el = scrollRef.current
+      if (el) autoState.current.offset = el.scrollLeft
+    }
+  }
 
   const doubled = [...CLIENT_LOGOS, ...CLIENT_LOGOS]
 
@@ -340,10 +370,15 @@ function ClientCarousel() {
     >
       <div
         ref={scrollRef}
-        className="flex gap-6 overflow-hidden"
-        style={{ scrollBehavior: 'auto' }}
-        onMouseEnter={() => setPaused(true)}
-        onMouseLeave={() => setPaused(false)}
+        className="flex gap-6 overflow-hidden select-none"
+        style={{
+          scrollBehavior: 'auto',
+          cursor: isDragging ? 'grabbing' : 'grab',
+        }}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleEnd}
+        onMouseLeave={handleEnd}
       >
         {doubled.map((logo, i) => (
           <ClientLogoCard key={`${logo.name}-${i}`} name={logo.name} initials={logo.initials} color={logo.color} domain={logo.domain} />
