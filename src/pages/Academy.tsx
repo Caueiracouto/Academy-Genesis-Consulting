@@ -430,6 +430,7 @@ export default function Academy() {
             { label: 'Trilhas', id: 'trilhas' },
             { label: 'Cursos', id: 'cursos' },
             { label: 'Certificações', id: 'certificacoes' },
+            { label: 'Parceria', id: 'parceria' },
             { label: 'Instrutores', id: 'instrutores' },
             { label: 'Comparativo', id: 'comparativo' },
             { label: 'Clientes', id: 'clientes' },
@@ -935,6 +936,124 @@ export default function Academy() {
             <p style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.85rem', color: '#8f9c8f', lineHeight: 1.6 }}>
               <span style={{ color: '#46a239', fontWeight: 600 }}>Scaled Agile® Silver Partner.</span> Todas as certificações são oficiais, reconhecidas internacionalmente e incluem o exame de certificação.
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* PARTNERSHIP BANNER */}
+      <section id="parceria" className="py-24 px-8" style={{ borderTop: '1px solid #2a2e2a' }}>
+        <div className="max-w-6xl mx-auto">
+          <div className="mb-12">
+            <span style={{ fontFamily: 'Space Mono, monospace', fontSize: '0.7rem', letterSpacing: '0.18em', color: '#46a239', textTransform: 'uppercase', display: 'block', marginBottom: '0.75rem' }}>
+              Parceria Oficial
+            </span>
+            <h2 style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 'clamp(1.8rem, 4vw, 2.8rem)', fontWeight: 700, lineHeight: 1.15, letterSpacing: '-0.02em', maxWidth: '24ch' }}>
+              Parceiros oficiais da Scaled Agile®
+            </h2>
+          </div>
+
+          <div className="grid lg:grid-cols-5 gap-0" style={{ border: '1px solid #2a2e2a', borderRadius: '16px', overflow: 'hidden' }}>
+            {/* Left: Silver Partner badge */}
+            <div className="lg:col-span-2 p-10 flex flex-col items-center justify-center gap-6 relative overflow-hidden"
+              style={{ backgroundColor: '#1a1f1a', borderRight: '1px solid #2a2e2a' }}>
+              <div className="absolute inset-0" style={{ background: 'radial-gradient(circle at center, rgba(192,192,192,0.06), transparent 65%)' }} />
+
+              {/* Silver shield badge */}
+              <div className="relative flex flex-col items-center gap-4">
+                <div style={{
+                  width: 120, height: 120,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  borderRadius: '50%',
+                  border: '3px solid #c0c0c0',
+                  background: 'linear-gradient(135deg, rgba(192,192,192,0.12), rgba(192,192,192,0.03))',
+                  position: 'relative',
+                }}>
+                  <div style={{
+                    width: 100, height: 100,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    borderRadius: '50%',
+                    border: '1px solid rgba(192,192,192,0.25)',
+                    flexDirection: 'column',
+                    gap: '0.15rem',
+                  }}>
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#c0c0c0" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                      <path d="M9 12l2 2 4-4" />
+                    </svg>
+                    <span style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.7rem', fontWeight: 800, color: '#c0c0c0', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Silver</span>
+                  </div>
+                </div>
+                <div className="text-center">
+                  <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '0.65rem', color: '#8f9c8f', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '0.3rem' }}>
+                    Nível de Parceria
+                  </p>
+                  <p style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '1.3rem', fontWeight: 700, color: '#c0c0c0', letterSpacing: '-0.01em' }}>
+                    Silver Partner
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Right: Details */}
+            <div className="lg:col-span-3 p-10 flex flex-col gap-6" style={{ backgroundColor: '#242824' }}>
+              <div className="flex items-center gap-3">
+                <span style={{
+                  fontFamily: 'Space Mono, monospace',
+                  fontSize: '0.65rem',
+                  fontWeight: 700,
+                  color: '#c0c0c0',
+                  letterSpacing: '0.12em',
+                  textTransform: 'uppercase',
+                  padding: '0.35rem 0.8rem',
+                  backgroundColor: 'rgba(192,192,192,0.1)',
+                  border: '1px solid rgba(192,192,192,0.3)',
+                  borderRadius: '8px',
+                }}>
+                  Scaled Agile® Silver Partner
+                </span>
+              </div>
+
+              <h3 style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '1.5rem', fontWeight: 700, lineHeight: 1.3, letterSpacing: '-0.01em', color: '#edf3ed' }}>
+                Uma parceria de nível prata reconhecida oficialmente pela Scaled Agile, Inc.
+              </h3>
+
+              <p style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.95rem', color: '#8f9c8f', lineHeight: 1.75 }}>
+                Como <span style={{ color: '#c0c0c0', fontWeight: 600 }}>Silver Partner</span>, a Genesis Consulting está autorizada a ministrar treinamentos oficiais SAFe®, aplicar exames de certificação internacional e emitir credenciais reconhecidas globalmente pela Scaled Agile, Inc. Isso significa que cada certificado obtido em nossos cursos tem validade internacional e peso no mercado.
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-2">
+                <div className="flex flex-col gap-2 p-4" style={{ border: '1px solid #2a2e2a', borderRadius: '12px', backgroundColor: '#1a1f1a' }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#46a239" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                  </svg>
+                  <span style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.82rem', fontWeight: 600, color: '#edf3ed' }}>Treinamentos oficiais</span>
+                  <span style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.78rem', color: '#8f9c8f', lineHeight: 1.5 }}>Cursos autorizados pela Scaled Agile® com currículo oficial.</span>
+                </div>
+                <div className="flex flex-col gap-2 p-4" style={{ border: '1px solid #2a2e2a', borderRadius: '12px', backgroundColor: '#1a1f1a' }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#46a239" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M9 12l2 2 4-4"/><path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9c1.66 0 3.22.45 4.56 1.24"/>
+                  </svg>
+                  <span style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.82rem', fontWeight: 600, color: '#edf3ed' }}>Certificações globais</span>
+                  <span style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.78rem', color: '#8f9c8f', lineHeight: 1.5 }}>Exames e credenciais reconhecidos internacionalmente.</span>
+                </div>
+                <div className="flex flex-col gap-2 p-4" style={{ border: '1px solid #2a2e2a', borderRadius: '12px', backgroundColor: '#1a1f1a' }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#46a239" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+                  </svg>
+                  <span style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.82rem', fontWeight: 600, color: '#edf3ed' }}>Consultores certificados</span>
+                  <span style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.78rem', color: '#8f9c8f', lineHeight: 1.5 }}>Instrutores SAFe Practice Consultants (SPCs) ativos.</span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 mt-4 pt-4" style={{ borderTop: '1px solid #2a2e2a' }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#46a239" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+                <p style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.85rem', color: '#8f9c8f', lineHeight: 1.6 }}>
+                  <span style={{ color: '#c0c0c0', fontWeight: 600 }}>Nível Prata</span> — o segundo nível mais alto de parceria com a Scaled Agile®, Inc.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
