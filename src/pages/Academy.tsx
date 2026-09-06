@@ -240,13 +240,26 @@ const CLIENT_LOGOS = [
 ]
 
 function ClientLogoCard({ name, initials, color, domain }: { name: string; initials: string; color: string; domain: string }) {
-  const [imgError, setImgError] = useState(false)
-  const logoUrl = `https://logo.clearbit.com/${domain}?size=128`
+  const sources = [
+    `https://icon.horse/icon/${domain}`,
+    `https://www.google.com/s2/favicons?domain=${domain}&sz=128`,
+    `https://logo.clearbit.com/${domain}?size=128`,
+  ]
+  const [sourceIdx, setSourceIdx] = useState(0)
+  const [allFailed, setAllFailed] = useState(false)
+
+  const handleError = () => {
+    if (sourceIdx + 1 < sources.length) {
+      setSourceIdx(sourceIdx + 1)
+    } else {
+      setAllFailed(true)
+    }
+  }
 
   return (
     <div className="flex flex-col items-center gap-3 flex-shrink-0" style={{ width: 160 }}>
       <div className="flex items-center justify-center" style={{ width: 80, height: 80, borderRadius: '16px', backgroundColor: '#1a1f1a', border: '1px solid #2a2e2a', overflow: 'hidden', position: 'relative' }}>
-        {imgError ? (
+        {allFailed ? (
           <div style={{
             width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center',
             background: `linear-gradient(135deg, ${color}18, ${color}08)`,
@@ -263,10 +276,10 @@ function ClientLogoCard({ name, initials, color, domain }: { name: string; initi
           </div>
         ) : (
           <img
-            src={logoUrl}
+            src={sources[sourceIdx]}
             alt={name}
-            onError={() => setImgError(true)}
-            style={{ maxWidth: '70%', maxHeight: '70%', objectFit: 'contain', filter: 'grayscale(0.2) brightness(1.1)' }}
+            onError={handleError}
+            style={{ maxWidth: '72%', maxHeight: '72%', objectFit: 'contain' }}
           />
         )}
       </div>
