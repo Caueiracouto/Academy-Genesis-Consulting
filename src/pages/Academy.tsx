@@ -196,89 +196,86 @@ const CASES = [
   },
 ]
 
+const LOGO_BASE = 'https://br.genesisconsulting.com/wp-content/uploads/2025/05'
+
 const CLIENT_LOGOS = [
-  { name: 'Banco do Brasil', initials: 'BB', color: '#F7C800', domain: 'bb.com.br' },
-  { name: 'Bradesco', initials: 'Br', color: '#CC092F', domain: 'bradesco.com.br' },
-  { name: 'Itaú Unibanco', initials: 'It', color: '#EC700C', domain: 'itau.com.br' },
-  { name: 'Caixa', initials: 'Cx', color: '#0066B3', domain: 'caixa.gov.br' },
-  { name: 'Santander', initials: 'Sa', color: '#EC0000', domain: 'santander.com.br' },
-  { name: 'Vale', initials: 'Va', color: '#2D6E3E', domain: 'vale.com' },
-  { name: 'Petrobras', initials: 'Pe', color: '#00A859', domain: 'petrobras.com.br' },
-  { name: 'Vivo', initials: 'Vi', color: '#660099', domain: 'vivo.com.br' },
-  { name: 'Claro', initials: 'Cl', color: '#DA291C', domain: 'claro.com.br' },
-  { name: 'TIM', initials: 'Ti', color: '#0046AD', domain: 'tim.com.br' },
-  { name: 'Ambev', initials: 'Am', color: '#00A19A', domain: 'ambev.com.br' },
-  { name: 'JBS', initials: 'JB', color: '#E2231A', domain: 'jbs.com.br' },
-  { name: 'Natura', initials: 'Na', color: '#C5007A', domain: 'natura.com.br' },
-  { name: 'Magalu', initials: 'Mg', color: '#0086FF', domain: 'magazineluiza.com.br' },
-  { name: 'Renner', initials: 'Re', color: '#D9A600', domain: 'lojasrenner.com.br' },
-  { name: 'Carrefour', initials: 'Ca', color: '#195CAA', domain: 'carrefour.com.br' },
-  { name: 'Assaí', initials: 'As', color: '#E2001A', domain: 'assai.com.br' },
-  { name: 'Gerdau', initials: 'Ge', color: '#00529B', domain: 'gerdau.com.br' },
-  { name: 'Usiminas', initials: 'Us', color: '#003D7A', domain: 'usiminas.com' },
-  { name: 'CSN', initials: 'CS', color: '#1A1A1A', domain: 'csn.com.br' },
-  { name: 'Embratel', initials: 'Em', color: '#FF6600', domain: 'embratel.com.br' },
-  { name: 'Algar', initials: 'Al', color: '#00529C', domain: 'algartelecom.com.br' },
-  { name: 'Localiza', initials: 'Lo', color: '#009C3D', domain: 'localiza.com.br' },
-  { name: 'Cielo', initials: 'Ci', color: '#003F87', domain: 'cielo.com.br' },
-  { name: 'Rede', initials: 'Rd', color: '#E60012', domain: 'userede.com.br' },
-  { name: 'Serpro', initials: 'Se', color: '#0066B3', domain: 'serpro.gov.br' },
-  { name: 'Dataprev', initials: 'Dp', color: '#1B5E20', domain: 'dataprev.gov.br' },
-  { name: 'TJSP', initials: 'TJ', color: '#8B0000', domain: 'tjsp.jus.br' },
-  { name: 'TJRJ', initials: 'RJ', color: '#003366', domain: 'tjrj.jus.br' },
-  { name: 'MPF', initials: 'MP', color: '#2E7D32', domain: 'mpf.mp.br' },
-  { name: 'Siemens', initials: 'Si', color: '#009999', domain: 'siemens.com' },
-  { name: 'Bosch', initials: 'Bo', color: '#ED1C24', domain: 'bosch.com.br' },
-  { name: 'ABB', initials: 'AB', color: '#FF000F', domain: 'abb.com' },
-  { name: 'Schneider', initials: 'Sc', color: '#3DCD58', domain: 'se.com' },
-  { name: 'Embraer', initials: 'Eb', color: '#0A1F44', domain: 'embraer.com' },
-  { name: 'Raízen', initials: 'Ra', color: '#0066B3', domain: 'raizen.com.br' },
-  { name: 'Ultrapar', initials: 'Ul', color: '#00529B', domain: 'ultra.com.br' },
-  { name: 'Cosan', initials: 'Co', color: '#0066CC', domain: 'cosan.com.br' },
-  { name: 'Suzano', initials: 'Su', color: '#0066B3', domain: 'suzano.com.br' },
-  { name: 'Klabin', initials: 'Kl', color: '#0066B3', domain: 'klabin.com.br' },
+  { name: 'B3', logo: `${LOGO_BASE}/B3.png` },
+  { name: 'Nestlé', logo: `${LOGO_BASE}/Nestle.svg` },
+  { name: 'Cielo', logo: `${LOGO_BASE}/cielo.webp` },
+  { name: "Rede D'Or", logo: `${LOGO_BASE}/Rede-dOr.webp` },
+  { name: 'Johnson & Johnson', logo: `${LOGO_BASE}/Johnson-Johnson.webp` },
+  { name: 'Banco do Brasil', logo: `${LOGO_BASE}/Banco-do-Brasil.svg` },
+  { name: 'Volvo', logo: `${LOGO_BASE}/Volvo-Iron-Mark-Black.svg` },
+  { name: 'V4 Company', logo: `${LOGO_BASE}/V4-company.webp` },
+  { name: 'SKF', logo: `${LOGO_BASE}/SKF.svg` },
+  { name: 'Iron Mountain', logo: `${LOGO_BASE}/Iron-Mountain.svg` },
+  { name: 'Belgo Arames', logo: `${LOGO_BASE}/belgo-arames.webp` },
+  { name: 'Panasonic', logo: `${LOGO_BASE}/panasonic.svg` },
+  { name: 'Nike', logo: `${LOGO_BASE}/Nike.svg` },
+  { name: 'Mercedes-Benz', logo: `${LOGO_BASE}/Mercedes-Benz.svg` },
+  { name: 'Ford', logo: `${LOGO_BASE}/Ford.svg` },
+  { name: 'British American Tobacco', logo: `${LOGO_BASE}/British-American-Tobacco.svg` },
+  { name: 'Coca-Cola', logo: `${LOGO_BASE}/Coca-Cola.svg` },
+  { name: 'Dassault Systèmes', logo: `${LOGO_BASE}/Dassault-Systems.webp` },
+  { name: 'Prologis', logo: `${LOGO_BASE}/Prologis.svg` },
+  { name: 'Gore', logo: `${LOGO_BASE}/gore.svg` },
+  { name: 'Tidewater', logo: `${LOGO_BASE}/tidewater.webp` },
+  { name: 'ACT', logo: `${LOGO_BASE}/ACT.webp` },
+  { name: 'UPS', logo: `${LOGO_BASE}/UPS.svg` },
+  { name: 'SunTrust', logo: `${LOGO_BASE}/SunTrust.webp` },
+  { name: 'Allen Harim', logo: `${LOGO_BASE}/Allen.webp` },
+  { name: 'Cprime', logo: `${LOGO_BASE}/cprime.webp` },
+  { name: 'Citizens', logo: `${LOGO_BASE}/citizens.webp` },
+  { name: 'CAQH', logo: `${LOGO_BASE}/CAQH.webp` },
+  { name: 'OnRoute', logo: `${LOGO_BASE}/OnRoute.webp` },
+  { name: 'NASA', logo: `${LOGO_BASE}/Nasa.webp` },
+  { name: 'US Air Force', logo: `${LOGO_BASE}/US-Air-Force.webp` },
+  { name: 'US Army', logo: `${LOGO_BASE}/US-Army.svg` },
+  { name: 'US Navy', logo: `${LOGO_BASE}/United-States-Navy.svg` },
+  { name: 'US Federal Reserve', logo: `${LOGO_BASE}/US-Federal-Reserve-System.webp` },
+  { name: 'US NRC', logo: `${LOGO_BASE}/US-NRC.webp` },
+  { name: 'USDA', logo: `${LOGO_BASE}/USDA.svg` },
+  { name: 'Homeland Security', logo: `${LOGO_BASE}/Homeland-Security.svg` },
+  { name: 'Forest Service', logo: `${LOGO_BASE}/Forest-Service.svg` },
+  { name: 'Library of Congress', logo: `${LOGO_BASE}/Library-Congress.svg` },
+  { name: 'CMS', logo: `${LOGO_BASE}/CMS.webp` },
+  { name: 'Management Services', logo: `${LOGO_BASE}/Management-Services.webp` },
+  { name: 'SC DOT', logo: `${LOGO_BASE}/SC-DOT.webp` },
+  { name: 'Omnitrans', logo: `${LOGO_BASE}/Omnitrans.webp` },
+  { name: 'NFC', logo: `${LOGO_BASE}/NFC.webp` },
+  { name: 'SFUSD', logo: `${LOGO_BASE}/SFUSD.webp` },
+  { name: 'LA Unified School District', logo: `${LOGO_BASE}/LA-Unified-School-District.webp` },
+  { name: 'Fulton County Schools', logo: `${LOGO_BASE}/Fulton-County-Schools.webp` },
+  { name: 'Minneapolis Public Schools', logo: `${LOGO_BASE}/Minneapolis-Public-Schools-transparent.png` },
+  { name: 'Washington State University', logo: `${LOGO_BASE}/Washington-State-University.webp` },
+  { name: 'Broward', logo: `${LOGO_BASE}/Broward.webp` },
+  { name: 'Fairfax County Virginia', logo: `${LOGO_BASE}/County-Fairfax-Virginia.webp` },
+  { name: 'Fairfax County Public Schools', logo: `${LOGO_BASE}/Fairfax-County-Public-Schools.svg` },
+  { name: 'Loudon Water', logo: `${LOGO_BASE}/Loudon-Water.svg` },
 ]
 
-function ClientLogoCard({ name, initials, color, domain }: { name: string; initials: string; color: string; domain: string }) {
-  const sources = [
-    `https://icon.horse/icon/${domain}`,
-    `https://www.google.com/s2/favicons?domain=${domain}&sz=128`,
-    `https://logo.clearbit.com/${domain}?size=128`,
-  ]
-  const [sourceIdx, setSourceIdx] = useState(0)
-  const [allFailed, setAllFailed] = useState(false)
-
-  const handleError = () => {
-    if (sourceIdx + 1 < sources.length) {
-      setSourceIdx(sourceIdx + 1)
-    } else {
-      setAllFailed(true)
-    }
-  }
+function ClientLogoCard({ name, logo }: { name: string; logo: string }) {
+  const [imgError, setImgError] = useState(false)
 
   return (
     <div className="flex flex-col items-center gap-3 flex-shrink-0" style={{ width: 160 }}>
       <div className="flex items-center justify-center" style={{ width: 80, height: 80, borderRadius: '16px', backgroundColor: '#1a1f1a', border: '1px solid #2a2e2a', overflow: 'hidden', position: 'relative' }}>
-        {allFailed ? (
-          <div style={{
-            width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center',
-            background: `linear-gradient(135deg, ${color}18, ${color}08)`,
+        {imgError ? (
+          <span style={{
+            fontFamily: 'Plus Jakarta Sans, sans-serif',
+            fontSize: '0.75rem',
+            fontWeight: 700,
+            color: '#8f9c8f',
+            textAlign: 'center',
+            padding: '0 0.5rem',
           }}>
-            <span style={{
-              fontFamily: 'Plus Jakarta Sans, sans-serif',
-              fontSize: '1.6rem',
-              fontWeight: 800,
-              color: color,
-              letterSpacing: '-0.02em',
-            }}>
-              {initials}
-            </span>
-          </div>
+            {name}
+          </span>
         ) : (
           <img
-            src={sources[sourceIdx]}
+            src={logo}
             alt={name}
-            onError={handleError}
+            onError={() => setImgError(true)}
             style={{ maxWidth: '72%', maxHeight: '72%', objectFit: 'contain' }}
           />
         )}
@@ -381,7 +378,7 @@ function ClientCarousel() {
         onMouseLeave={handleEnd}
       >
         {doubled.map((logo, i) => (
-          <ClientLogoCard key={`${logo.name}-${i}`} name={logo.name} initials={logo.initials} color={logo.color} domain={logo.domain} />
+          <ClientLogoCard key={`${logo.name}-${i}`} name={logo.name} logo={logo.logo} />
         ))}
       </div>
     </div>
