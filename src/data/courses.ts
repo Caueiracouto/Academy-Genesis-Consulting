@@ -26,6 +26,8 @@ export interface Course {
   includes: string[]
   pdus: string
   linkedinUrl?: string
+  price: number
+  marketPrice: number
 }
 
 export const COURSES: Course[] = [
@@ -90,6 +92,8 @@ export const COURSES: Course[] = [
     ],
     pdus: '24 PDUs (PMI) + SEUs Categoria C (Scrum Alliance)',
     linkedinUrl: 'https://br.genesisconsulting.com/treinamentos/',
+    price: 6500,
+    marketPrice: 9500,
   },
   {
     id: 2,
@@ -149,6 +153,8 @@ export const COURSES: Course[] = [
     ],
     pdus: '24 PDUs (PMI) + SEUs Categoria C (Scrum Alliance)',
     linkedinUrl: 'https://br.genesisconsulting.com/treinamentos/',
+    price: 2300,
+    marketPrice: 3500,
   },
   {
     id: 3,
@@ -202,6 +208,8 @@ export const COURSES: Course[] = [
     ],
     pdus: '24 PDUs (PMI) + SEUs Categoria C (Scrum Alliance)',
     linkedinUrl: 'https://br.genesisconsulting.com/treinamentos/',
+    price: 2300,
+    marketPrice: 3000,
   },
   {
     id: 4,
@@ -252,6 +260,8 @@ export const COURSES: Course[] = [
     ],
     pdus: '24 PDUs (PMI) + SEUs Categoria C (Scrum Alliance)',
     linkedinUrl: 'https://br.genesisconsulting.com/treinamentos/',
+    price: 1900,
+    marketPrice: 2800,
   },
   {
     id: 5,
@@ -311,6 +321,8 @@ export const COURSES: Course[] = [
     ],
     pdus: '24 PDUs (PMI) + SEUs Categoria C (Scrum Alliance)',
     linkedinUrl: 'https://br.genesisconsulting.com/treinamentos/',
+    price: 2500,
+    marketPrice: 3500,
   },
   {
     id: 6,
@@ -367,6 +379,8 @@ export const COURSES: Course[] = [
     ],
     pdus: '24 PDUs (PMI) + SEUs Categoria C (Scrum Alliance)',
     linkedinUrl: 'https://br.genesisconsulting.com/treinamentos/',
+    price: 3200,
+    marketPrice: 4500,
   },
   {
     id: 7,
@@ -424,6 +438,8 @@ export const COURSES: Course[] = [
     ],
     pdus: '24 PDUs (PMI) + SEUs Categoria C (Scrum Alliance)',
     linkedinUrl: 'https://br.genesisconsulting.com/treinamentos/',
+    price: 8500,
+    marketPrice: 11000,
   },
   {
     id: 8,
@@ -479,6 +495,8 @@ export const COURSES: Course[] = [
     ],
     pdus: '24 PDUs (PMI) + SEUs Categoria C (Scrum Alliance)',
     linkedinUrl: 'https://br.genesisconsulting.com/treinamentos/',
+    price: 2300,
+    marketPrice: 3200,
   },
   {
     id: 9,
@@ -535,6 +553,8 @@ export const COURSES: Course[] = [
     ],
     pdus: '24 PDUs (PMI) + SEUs Categoria C (Scrum Alliance)',
     linkedinUrl: 'https://br.genesisconsulting.com/treinamentos/',
+    price: 7800,
+    marketPrice: 11500,
   },
   {
     id: 10,
@@ -593,6 +613,8 @@ export const COURSES: Course[] = [
     ],
     pdus: '24 PDUs (PMI) + SEUs Categoria C (Scrum Alliance)',
     linkedinUrl: 'https://br.genesisconsulting.com/treinamentos/',
+    price: 6500,
+    marketPrice: 9500,
   },
 ]
 

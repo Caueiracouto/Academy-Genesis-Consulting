@@ -4,6 +4,10 @@ import { Building2, ShoppingCart, Plus, Check } from 'lucide-react'
 import { COURSES } from '@/data/courses'
 import { useCart, type CartItem } from '@/lib/cart'
 
+function formatBRL(value: number): string {
+  return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+}
+
 const LEVEL_COLOR: Record<string, { text: string; bg: string; border: string }> = {
   Iniciante: { text: '#5ec04f', bg: 'rgba(94,192,79,0.08)', border: 'rgba(94,192,79,0.25)' },
   Intermediário: { text: '#d4a843', bg: 'rgba(212,168,67,0.08)', border: 'rgba(212,168,67,0.25)' },
@@ -42,6 +46,7 @@ export default function CourseDetail() {
       certCode: course.certCode,
       duration: course.duration,
       sessions: course.sessions,
+      price: course.price,
     }
     addToCart(cartItem)
   }
@@ -251,7 +256,7 @@ export default function CourseDetail() {
               <p style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '1.5rem', fontWeight: 700, lineHeight: 1.25, marginBottom: '1.25rem' }}>
                 Garanta sua vaga neste treinamento
               </p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1.5rem' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1.25rem' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.6rem 0', borderBottom: '1px solid #2a2e2a' }}>
                   <span style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.82rem', color: '#8f9c8f' }}>Carga horária</span>
                   <span style={{ fontFamily: 'Space Mono, monospace', fontSize: '0.82rem', color: '#edf3ed' }}>{course.duration}</span>
@@ -268,6 +273,20 @@ export default function CourseDetail() {
                   <span style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.82rem', color: '#8f9c8f' }}>Idioma</span>
                   <span style={{ fontFamily: 'Space Mono, monospace', fontSize: '0.82rem', color: '#edf3ed' }}>Português</span>
                 </div>
+              </div>
+
+              <div style={{ marginBottom: '1.25rem', padding: '1rem', backgroundColor: 'rgba(70,162,57,0.05)', border: '1px solid rgba(70,162,57,0.15)', borderRadius: '12px' }}>
+                <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.6rem', marginBottom: '0.35rem' }}>
+                  <span style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '1.75rem', fontWeight: 700, color: '#46a239', letterSpacing: '-0.02em' }}>
+                    {formatBRL(course.price)}
+                  </span>
+                  <span style={{ fontFamily: 'Space Mono, monospace', fontSize: '0.78rem', color: '#5a635a', textDecoration: 'line-through', marginBottom: '0.3rem' }}>
+                    {formatBRL(course.marketPrice)}
+                  </span>
+                </div>
+                <p style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.72rem', color: '#8f9c8f', lineHeight: 1.4 }}>
+                  {formatBRL(course.marketPrice - course.price)} de desconto · pagamento em Pix, boleto ou 12x
+                </p>
               </div>
               <button
                 onClick={handleAddToCart}

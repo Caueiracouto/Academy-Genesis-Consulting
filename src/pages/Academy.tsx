@@ -4,6 +4,10 @@ import { ShoppingCart, Plus, Check } from 'lucide-react'
 import { COURSES, CATEGORIES } from '@/data/courses'
 import { useCart, type CartItem } from '@/lib/cart'
 
+function formatBRL(value: number): string {
+  return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+}
+
 const CERT_TO_SLUG: Record<string, string> = Object.fromEntries(
   COURSES.map(c => [c.certCode, c.slug])
 )
@@ -415,6 +419,7 @@ export default function Academy() {
       certCode: course.certCode,
       duration: course.duration,
       sessions: course.sessions,
+      price: course.price,
     }
     addToCart(cartItem)
   }
@@ -872,6 +877,15 @@ export default function Academy() {
                   <p style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.825rem', color: '#8f9c8f', lineHeight: 1.6 }}>
                     {course.description}
                   </p>
+
+                  <div className="flex items-end gap-2 mt-1">
+                    <span style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '1.25rem', fontWeight: 700, color: '#edf3ed', letterSpacing: '-0.01em' }}>
+                      {formatBRL(course.price)}
+                    </span>
+                    <span style={{ fontFamily: 'Space Mono, monospace', fontSize: '0.7rem', color: '#5a635a', textDecoration: 'line-through', marginBottom: '0.2rem' }}>
+                      {formatBRL(course.marketPrice)}
+                    </span>
+                  </div>
 
                   <div className="flex items-center justify-between mt-auto pt-4" style={{ borderTop: '1px solid #2a2e2a' }}>
                     <div className="flex gap-4">

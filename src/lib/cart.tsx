@@ -6,6 +6,7 @@ export interface CartItem {
   certCode: string
   duration: string
   sessions: string
+  price: number
 }
 
 interface CartContextValue {

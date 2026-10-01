@@ -3,8 +3,18 @@ import { X, ShoppingCart, Trash2, ArrowRight, CheckCircle2, User, Mail, Phone, B
 import { useCart } from '@/lib/cart'
 import { saveAbandonedCart } from '@/lib/tracking'
 
+function formatBRL(value: number): string {
+  return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+}
+
 export function CartDrawer() {
   const { items, isOpen, closeCart, removeFromCart, openCheckout } = useCart()
+  const total = items.reduce((sum, i) => sum + i.price, 0)
+  const marketTotal = items.reduce((sum, i) => sum + (items.find(x => x.slug === i.slug)?.price ?? i.price), 0)
+  const savings = items.reduce((sum, i) => {
+    const course = items.find(x => x.slug === i.slug)
+    return sum + (course ? 0 : 0)
+  }, 0)
 
   return (
     <>
@@ -101,9 +111,16 @@ export function CartDrawer() {
                     <p style={{
                       fontFamily: 'Space Mono, monospace',
                       fontSize: '0.6rem', color: '#5a635a', letterSpacing: '0.06em',
+                      marginBottom: '0.35rem',
                     }}>
                       {item.duration} · {item.sessions}
                     </p>
+                    <span style={{
+                      fontFamily: 'Plus Jakarta Sans, sans-serif',
+                      fontSize: '0.85rem', fontWeight: 700, color: '#46a239',
+                    }}>
+                      {formatBRL(item.price)}
+                    </span>
                   </div>
                   <button onClick={() => removeFromCart(item.slug)} style={{
                     background: 'none', border: 'none', cursor: 'pointer',
@@ -120,6 +137,12 @@ export function CartDrawer() {
         {/* Footer */}
         {items.length > 0 && (
           <div style={{ padding: '1.25rem 1.5rem', borderTop: '1px solid #2a2e2a' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+              <span style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.8rem', color: '#8f9c8f' }}>Total</span>
+              <span style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '1.3rem', fontWeight: 700, color: '#46a239' }}>
+                {formatBRL(total)}
+              </span>
+            </div>
             <button onClick={openCheckout} style={{
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
               width: '100%', fontFamily: 'Plus Jakarta Sans, sans-serif',
@@ -145,16 +168,18 @@ export function CheckoutModal() {
   const [form, setForm] = useState({ name: '', email: '', phone: '', company: '' })
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
+  const total = items.reduce((sum, i) => sum + i.price, 0)
 
   // Save abandoned cart whenever the checkout form is opened and has items
   useEffect(() => {
     if (checkoutOpen && items.length > 0 && !submitted) {
       saveAbandonedCart({
         ...form,
-        cartItems: items.map(i => ({ slug: i.slug, title: i.title })),
+        cartItems: items.map(i => ({ slug: i.slug, title: i.title, price: i.price })),
+        cartTotal: total,
       })
     }
-  }, [checkoutOpen, items, form, submitted])
+  }, [checkoutOpen, items, form, submitted, total])
 
   // Save on unmount / page unload if checkout was open but not submitted
   useEffect(() => {
@@ -163,13 +188,14 @@ export function CheckoutModal() {
       if (items.length > 0) {
         saveAbandonedCart({
           ...form,
-          cartItems: items.map(i => ({ slug: i.slug, title: i.title })),
+          cartItems: items.map(i => ({ slug: i.slug, title: i.title, price: i.price })),
+          cartTotal: total,
         })
       }
     }
     window.addEventListener('beforeunload', handler)
     return () => window.removeEventListener('beforeunload', handler)
-  }, [checkoutOpen, submitted, items, form])
+  }, [checkoutOpen, submitted, items, form, total])
 
   if (!checkoutOpen) return null
 
@@ -180,7 +206,8 @@ export function CheckoutModal() {
     // Save final abandoned cart record before "completing"
     await saveAbandonedCart({
       ...form,
-      cartItems: items.map(i => ({ slug: i.slug, title: i.title })),
+      cartItems: items.map(i => ({ slug: i.slug, title: i.title, price: i.price })),
+      cartTotal: total,
     })
 
     setLoading(false)
@@ -193,7 +220,8 @@ export function CheckoutModal() {
     if (!submitted && items.length > 0) {
       saveAbandonedCart({
         ...form,
-        cartItems: items.map(i => ({ slug: i.slug, title: i.title })),
+        cartItems: items.map(i => ({ slug: i.slug, title: i.title, price: i.price })),
+        cartTotal: total,
       })
     }
     setSubmitted(false)
@@ -296,8 +324,18 @@ export function CheckoutModal() {
                       }}>
                         {item.title}
                       </span>
+                      <span style={{
+                        fontFamily: 'Plus Jakarta Sans, sans-serif',
+                        fontSize: '0.82rem', fontWeight: 700, color: '#46a239',
+                      }}>
+                        {formatBRL(item.price)}
+                      </span>
                     </div>
                   ))}
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.75rem', paddingTop: '0.75rem', borderTop: '1px solid #2a2e2a' }}>
+                  <span style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.85rem', color: '#8f9c8f' }}>Total</span>
+                  <span style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '1.2rem', fontWeight: 700, color: '#46a239' }}>{formatBRL(total)}</span>
                 </div>
               </div>
 
