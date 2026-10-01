@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { ShoppingCart, Plus, Check } from 'lucide-react'
 import { COURSES, CATEGORIES } from '@/data/courses'
+import { useCart, type CartItem } from '@/lib/cart'
 
 const CERT_TO_SLUG: Record<string, string> = Object.fromEntries(
   COURSES.map(c => [c.certCode, c.slug])
@@ -397,10 +399,25 @@ function scrollTo(id: string) {
 
 export default function Academy() {
   const navigate = useNavigate()
+  const { items, addToCart, openCart } = useCart()
   const [activeCategory, setActiveCategory] = useState('Todos')
   const [hoveredCourse, setHoveredCourse] = useState<number | null>(null)
   const [activePath, setActivePath] = useState(1)
   const pathsRef = useRef<HTMLElement>(null)
+
+  const inCart = (slug: string) => items.some(i => i.slug === slug)
+
+  const handleAddToCart = (course: typeof COURSES[0]) => {
+    if (inCart(course.slug)) return
+    const cartItem: CartItem = {
+      slug: course.slug,
+      title: course.title,
+      certCode: course.certCode,
+      duration: course.duration,
+      sessions: course.sessions,
+    }
+    addToCart(cartItem)
+  }
 
   const filtered = activeCategory === 'Todos'
     ? COURSES
@@ -437,22 +454,61 @@ export default function Academy() {
               className="hover:text-white transition-colors">{item.label}</button>
           ))}
         </div>
-        <button
-          style={{
-            fontFamily: 'Plus Jakarta Sans, sans-serif',
-            fontSize: '0.8rem',
-            fontWeight: 700,
-            letterSpacing: '0.04em',
-            textTransform: 'uppercase',
-            backgroundColor: '#46a239',
-            color: '#030903',
-            padding: '0.5rem 1.4rem',
-            borderRadius: '8px',
-          }}
-          className="hover:bg-green-500 transition-colors"
-          onClick={() => scrollTo('cursos')}>
-          Começar agora
-        </button>
+        <div className="flex items-center gap-3">
+          {items.length > 0 && (
+            <button
+              onClick={openCart}
+              style={{
+                position: 'relative',
+                background: 'none',
+                border: '1px solid #3a3f3a',
+                borderRadius: '8px',
+                padding: '0.5rem 0.7rem',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.4rem',
+              }}
+              className="hover:border-white/40 transition-colors"
+            >
+              <ShoppingCart size={16} color="#46a239" />
+              {items.length > 0 && (
+                <span style={{
+                  position: 'absolute',
+                  top: -6, right: -6,
+                  width: 18, height: 18,
+                  borderRadius: '50%',
+                  backgroundColor: '#46a239',
+                  color: '#030903',
+                  fontSize: '0.6rem',
+                  fontWeight: 700,
+                  display: 'flex',
+                alignItems: 'center',
+                  justifyContent: 'center',
+                  fontFamily: 'Plus Jakarta Sans, sans-serif',
+                }}>
+                  {items.length}
+                </span>
+              )}
+            </button>
+          )}
+          <button
+            style={{
+              fontFamily: 'Plus Jakarta Sans, sans-serif',
+              fontSize: '0.8rem',
+              fontWeight: 700,
+              letterSpacing: '0.04em',
+              textTransform: 'uppercase',
+              backgroundColor: '#46a239',
+              color: '#030903',
+              padding: '0.5rem 1.4rem',
+              borderRadius: '8px',
+            }}
+            className="hover:bg-green-500 transition-colors"
+            onClick={() => scrollTo('cursos')}>
+            Começar agora
+          </button>
+        </div>
       </nav>
 
       {/* HERO */}
@@ -832,11 +888,11 @@ export default function Academy() {
                   </div>
                 </div>
 
-                <div className="px-5 pb-5">
+                <div className="px-5 pb-5 flex gap-2">
                   <button
                     onClick={() => navigate(`/treinamento/${course.slug}`)}
                     style={{
-                      width: '100%',
+                      flex: 1,
                       fontFamily: 'Plus Jakarta Sans, sans-serif',
                       fontSize: '0.8rem',
                       fontWeight: 600,
@@ -852,6 +908,26 @@ export default function Academy() {
                     }}
                     className="hover:bg-green-500/10 hover:border-green-400/60">
                     Ver curso →
+                  </button>
+                  <button
+                    onClick={() => handleAddToCart(course)}
+                    disabled={inCart(course.slug)}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: 40,
+                      flexShrink: 0,
+                      padding: '0.65rem',
+                      border: '1px solid rgba(70,162,57,0.35)',
+                      borderRadius: '8px',
+                      backgroundColor: inCart(course.slug) ? 'rgba(70,162,57,0.15)' : 'transparent',
+                      cursor: inCart(course.slug) ? 'default' : 'pointer',
+                      transition: 'all 0.2s',
+                    }}
+                    className="hover:bg-green-500/10 hover:border-green-400/60"
+                    title={inCart(course.slug) ? 'No carrinho' : 'Adicionar ao carrinho'}>
+                    {inCart(course.slug) ? <Check size={16} color="#46a239" /> : <Plus size={16} color="#46a239" />}
                   </button>
                 </div>
               </div>

@@ -1,7 +1,8 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { Building2 } from 'lucide-react'
+import { Building2, ShoppingCart, Plus, Check } from 'lucide-react'
 import { COURSES } from '@/data/courses'
+import { useCart, type CartItem } from '@/lib/cart'
 
 const LEVEL_COLOR: Record<string, { text: string; bg: string; border: string }> = {
   Iniciante: { text: '#5ec04f', bg: 'rgba(94,192,79,0.08)', border: 'rgba(94,192,79,0.25)' },
@@ -12,6 +13,7 @@ const LEVEL_COLOR: Record<string, { text: string; bg: string; border: string }> 
 export default function CourseDetail() {
   const { slug } = useParams<{ slug: string }>()
   const navigate = useNavigate()
+  const { items, addToCart, openCart } = useCart()
   const course = COURSES.find(c => c.slug === slug)
 
   useEffect(() => {
@@ -30,6 +32,19 @@ export default function CourseDetail() {
   }
 
   const lvl = LEVEL_COLOR[course.level]
+  const inCart = items.some(i => i.slug === course.slug)
+
+  const handleAddToCart = () => {
+    if (inCart) return
+    const cartItem: CartItem = {
+      slug: course.slug,
+      title: course.title,
+      certCode: course.certCode,
+      duration: course.duration,
+      sessions: course.sessions,
+    }
+    addToCart(cartItem)
+  }
 
   return (
     <div style={{ backgroundColor: '#030903', minHeight: '100vh', color: '#edf3ed' }}>
@@ -254,12 +269,40 @@ export default function CourseDetail() {
                   <span style={{ fontFamily: 'Space Mono, monospace', fontSize: '0.82rem', color: '#edf3ed' }}>Português</span>
                 </div>
               </div>
-              <a href="https://br.genesisconsulting.com/treinamentos/" target="_blank" rel="noopener noreferrer"
-                style={{ display: 'block', textAlign: 'center', fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.875rem', fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase', backgroundColor: '#46a239', color: '#030903', padding: '0.9rem', borderRadius: '12px', textDecoration: 'none', marginBottom: '0.75rem', transition: 'background-color 0.2s' }}
-                onMouseEnter={e => ((e.currentTarget as HTMLAnchorElement).style.backgroundColor = '#5ec04f')}
-                onMouseLeave={e => ((e.currentTarget as HTMLAnchorElement).style.backgroundColor = '#46a239')}>
-                Inscrever-se →
-              </a>
+              <button
+                onClick={handleAddToCart}
+                disabled={inCart}
+                style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
+                  width: '100%', fontFamily: 'Plus Jakarta Sans, sans-serif',
+                  fontSize: '0.875rem', fontWeight: 700, letterSpacing: '0.04em',
+                  textTransform: 'uppercase',
+                  backgroundColor: inCart ? 'rgba(70,162,57,0.15)' : '#46a239',
+                  color: '#030903', padding: '0.9rem', borderRadius: '12px',
+                  border: 'none', cursor: inCart ? 'default' : 'pointer',
+                  marginBottom: '0.75rem', transition: 'background-color 0.2s',
+                }}
+                onMouseEnter={e => { if (!inCart) (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#5ec04f' }}
+                onMouseLeave={e => { if (!inCart) (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#46a239' }}>
+                {inCart ? (<><Check size={18} /> No carrinho</>) : (<><Plus size={18} /> Adicionar ao carrinho</>)}
+              </button>
+              {items.length > 0 && (
+                <button
+                  onClick={openCart}
+                  style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
+                    width: '100%', fontFamily: 'Plus Jakarta Sans, sans-serif',
+                    fontSize: '0.8rem', fontWeight: 600, color: '#46a239',
+                    padding: '0.7rem', border: '1px solid rgba(70,162,57,0.3)', borderRadius: '12px',
+                    backgroundColor: 'rgba(70,162,57,0.06)', cursor: 'pointer', transition: 'all 0.2s',
+                    marginBottom: '0.75rem',
+                  }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'rgba(70,162,57,0.12)'; (e.currentTarget as HTMLButtonElement).style.borderColor = '#46a239' }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'rgba(70,162,57,0.06)'; (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(70,162,57,0.3)' }}>
+                  <ShoppingCart size={16} />
+                  Ver carrinho ({items.length})
+                </button>
+              )}
               <button onClick={() => navigate(`/empresa/${course.slug}`)}
                 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', width: '100%', fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.82rem', fontWeight: 600, color: '#46a239', padding: '0.75rem', border: '1px solid rgba(70,162,57,0.3)', borderRadius: '12px', background: 'rgba(70,162,57,0.06)', cursor: 'pointer', transition: 'all 0.2s', marginTop: '0.75rem' }}
                 onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'rgba(70,162,57,0.12)'; (e.currentTarget as HTMLButtonElement).style.borderColor = '#46a239' }}
