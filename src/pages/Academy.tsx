@@ -955,31 +955,13 @@ export default function Academy() {
               style={{ backgroundColor: '#1a1f1a', borderRight: '1px solid #2a2e2a' }}>
               <div className="absolute inset-0" style={{ background: 'radial-gradient(circle at center, rgba(192,192,192,0.06), transparent 65%)' }} />
 
-              {/* Silver shield badge */}
-              <div className="relative flex flex-col items-center gap-4">
-                <div style={{
-                  width: 120, height: 120,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  borderRadius: '50%',
-                  border: '3px solid #c0c0c0',
-                  background: 'linear-gradient(135deg, rgba(192,192,192,0.12), rgba(192,192,192,0.03))',
-                  position: 'relative',
-                }}>
-                  <div style={{
-                    width: 100, height: 100,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    borderRadius: '50%',
-                    border: '1px solid rgba(192,192,192,0.25)',
-                    flexDirection: 'column',
-                    gap: '0.15rem',
-                  }}>
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#c0c0c0" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                      <path d="M9 12l2 2 4-4" />
-                    </svg>
-                    <span style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.7rem', fontWeight: 800, color: '#c0c0c0', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Silver</span>
-                  </div>
-                </div>
+              {/* Official Scaled Agile Silver Partner badge */}
+              <div className="relative flex flex-col items-center gap-5">
+                <img
+                  src="https://br.genesisconsulting.com/wp-content/uploads/2025/05/Scaled-Agile-Partner-Silver.webp"
+                  alt="Scaled Agile Silver Partner"
+                  style={{ width: 160, height: 'auto', objectFit: 'contain' }}
+                />
                 <div className="text-center">
                   <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '0.65rem', color: '#8f9c8f', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '0.3rem' }}>
                     Nível de Parceria
