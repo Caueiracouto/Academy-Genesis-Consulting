@@ -30,7 +30,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>(() => {
     try {
       const stored = localStorage.getItem(CART_KEY)
-      return stored ? JSON.parse(stored) : []
+      const parsed: CartItem[] = stored ? JSON.parse(stored) : []
+      return parsed.filter(i => i && typeof i.price === 'number')
     } catch {
       return []
     }

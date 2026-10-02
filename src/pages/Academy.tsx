@@ -5,7 +5,8 @@ import { COURSES, CATEGORIES } from '@/data/courses'
 import { useCart, type CartItem } from '@/lib/cart'
 import { useAuth } from '@/lib/auth'
 
-function formatBRL(value: number): string {
+function formatBRL(value: number | undefined | null): string {
+  if (value == null || isNaN(value)) return '—'
   return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
 }
 

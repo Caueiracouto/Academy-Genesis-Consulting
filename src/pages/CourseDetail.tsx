@@ -4,7 +4,8 @@ import { Building2, ShoppingCart, Plus, Check } from 'lucide-react'
 import { COURSES } from '@/data/courses'
 import { useCart, type CartItem } from '@/lib/cart'
 
-function formatBRL(value: number): string {
+function formatBRL(value: number | undefined | null): string {
+  if (value == null || isNaN(value)) return '—'
   return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
 }
 

@@ -4,14 +4,15 @@ import { useCart } from '@/lib/cart'
 import { useAuth } from '@/lib/auth'
 import { saveAbandonedCart } from '@/lib/tracking'
 
-function formatBRL(value: number): string {
+function formatBRL(value: number | undefined | null): string {
+  if (value == null || isNaN(value)) return '—'
   return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
 }
 
 export function CartDrawer() {
   const { items, isOpen, closeCart, removeFromCart, openCheckout } = useCart()
   const { user, profile, openAuthModal } = useAuth()
-  const total = items.reduce((sum, i) => sum + i.price, 0)
+  const total = items.reduce((sum, i) => sum + (i.price ?? 0), 0)
 
   const handleCheckout = () => {
     if (!user) {
@@ -213,7 +214,7 @@ export function CheckoutModal() {
   const [company, setCompany] = useState('')
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
-  const total = items.reduce((sum, i) => sum + i.price, 0)
+  const total = items.reduce((sum, i) => sum + (i.price ?? 0), 0)
 
   const contactInfo = {
     name: profile?.full_name || user?.email || '',
