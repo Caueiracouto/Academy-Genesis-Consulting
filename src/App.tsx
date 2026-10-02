@@ -4,7 +4,9 @@ import Academy from '@/pages/Academy'
 import CourseDetail from '@/pages/CourseDetail'
 import CompanyTraining from '@/pages/CompanyTraining'
 import { CartProvider } from '@/lib/cart'
+import { AuthProvider } from '@/lib/auth'
 import { CartDrawer, CheckoutModal } from '@/components/CartUI'
+import { AuthModal } from '@/components/AuthModal'
 import { trackPageVisit } from '@/lib/tracking'
 
 export default function App() {
@@ -17,14 +19,17 @@ export default function App() {
   }, [location.pathname])
 
   return (
-    <CartProvider>
-      <Routes>
-        <Route path="/" element={<Academy />} />
-        <Route path="/treinamento/:slug" element={<CourseDetail />} />
-        <Route path="/empresa/:slug" element={<CompanyTraining />} />
-      </Routes>
-      <CartDrawer />
-      <CheckoutModal />
-    </CartProvider>
+    <AuthProvider>
+      <CartProvider>
+        <Routes>
+          <Route path="/" element={<Academy />} />
+          <Route path="/treinamento/:slug" element={<CourseDetail />} />
+          <Route path="/empresa/:slug" element={<CompanyTraining />} />
+        </Routes>
+        <CartDrawer />
+        <CheckoutModal />
+        <AuthModal />
+      </CartProvider>
+    </AuthProvider>
   )
 }

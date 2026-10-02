@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
-import { X, ShoppingCart, Trash2, ArrowRight, CheckCircle2, User, Mail, Phone, Building2 } from 'lucide-react'
+import { X, ShoppingCart, Trash2, ArrowRight, CheckCircle2, User, Mail, Phone, Building2, LogOut, Lock } from 'lucide-react'
 import { useCart } from '@/lib/cart'
+import { useAuth } from '@/lib/auth'
 import { saveAbandonedCart } from '@/lib/tracking'
 
 function formatBRL(value: number): string {
@@ -9,12 +10,16 @@ function formatBRL(value: number): string {
 
 export function CartDrawer() {
   const { items, isOpen, closeCart, removeFromCart, openCheckout } = useCart()
+  const { user, profile, openAuthModal } = useAuth()
   const total = items.reduce((sum, i) => sum + i.price, 0)
-  const marketTotal = items.reduce((sum, i) => sum + (items.find(x => x.slug === i.slug)?.price ?? i.price), 0)
-  const savings = items.reduce((sum, i) => {
-    const course = items.find(x => x.slug === i.slug)
-    return sum + (course ? 0 : 0)
-  }, 0)
+
+  const handleCheckout = () => {
+    if (!user) {
+      openAuthModal('signup')
+      return
+    }
+    openCheckout()
+  }
 
   return (
     <>
@@ -66,6 +71,29 @@ export function CartDrawer() {
             <X size={20} />
           </button>
         </div>
+
+        {/* Logged-in badge */}
+        {user && (
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: '0.5rem',
+            padding: '0.6rem 1.5rem', borderBottom: '1px solid #2a2e2a',
+            backgroundColor: 'rgba(70,162,57,0.04)',
+          }}>
+            <div style={{
+              width: 28, height: 28, borderRadius: '50%',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              backgroundColor: 'rgba(70,162,57,0.15)', border: '1px solid rgba(70,162,57,0.25)',
+            }}>
+              <User size={14} color="#46a239" />
+            </div>
+            <span style={{
+              fontFamily: 'Plus Jakarta Sans, sans-serif',
+              fontSize: '0.78rem', color: '#c4d0c4',
+            }}>
+              {profile?.full_name || user.email}
+            </span>
+          </div>
+        )}
 
         {/* Items */}
         <div style={{ flex: 1, overflowY: 'auto', padding: '1.25rem 1.5rem' }}>
@@ -143,7 +171,23 @@ export function CartDrawer() {
                 {formatBRL(total)}
               </span>
             </div>
-            <button onClick={openCheckout} style={{
+            {!user && (
+              <div style={{
+                display: 'flex', alignItems: 'center', gap: '0.4rem',
+                marginBottom: '0.65rem', padding: '0.55rem 0.75rem',
+                backgroundColor: 'rgba(70,162,57,0.06)', border: '1px solid rgba(70,162,57,0.15)',
+                borderRadius: '8px',
+              }}>
+                <Lock size={13} color="#46a239" />
+                <span style={{
+                  fontFamily: 'Plus Jakarta Sans, sans-serif',
+                  fontSize: '0.7rem', color: '#8f9c8f', lineHeight: 1.4,
+                }}>
+                  Faça login ou cadastre-se para finalizar
+                </span>
+              </div>
+            )}
+            <button onClick={handleCheckout} style={{
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
               width: '100%', fontFamily: 'Plus Jakarta Sans, sans-serif',
               fontSize: '0.85rem', fontWeight: 700, letterSpacing: '0.04em',
@@ -153,7 +197,7 @@ export function CartDrawer() {
             }}
             onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#5ec04f')}
             onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#46a239')}>
-              Finalizar Inscrição
+              {user ? 'Finalizar Inscrição' : 'Entrar / Cadastrar'}
               <ArrowRight size={16} />
             </button>
           </div>
@@ -165,29 +209,36 @@ export function CartDrawer() {
 
 export function CheckoutModal() {
   const { items, checkoutOpen, closeCheckout, clearCart } = useCart()
-  const [form, setForm] = useState({ name: '', email: '', phone: '', company: '' })
+  const { user, profile, signOut } = useAuth()
+  const [company, setCompany] = useState('')
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
   const total = items.reduce((sum, i) => sum + i.price, 0)
 
-  // Save abandoned cart whenever the checkout form is opened and has items
+  const contactInfo = {
+    name: profile?.full_name || user?.email || '',
+    email: user?.email || '',
+    phone: profile?.phone || '',
+  }
+
+  // Save abandoned cart whenever the checkout is open and has items
   useEffect(() => {
     if (checkoutOpen && items.length > 0 && !submitted) {
       saveAbandonedCart({
-        ...form,
+        ...contactInfo,
         cartItems: items.map(i => ({ slug: i.slug, title: i.title, price: i.price })),
         cartTotal: total,
       })
     }
-  }, [checkoutOpen, items, form, submitted, total])
+  }, [checkoutOpen, items, submitted, total, contactInfo.name, contactInfo.email, contactInfo.phone])
 
-  // Save on unmount / page unload if checkout was open but not submitted
+  // Save on page unload if checkout was open but not submitted
   useEffect(() => {
     if (!checkoutOpen || submitted) return
     const handler = () => {
       if (items.length > 0) {
         saveAbandonedCart({
-          ...form,
+          ...contactInfo,
           cartItems: items.map(i => ({ slug: i.slug, title: i.title, price: i.price })),
           cartTotal: total,
         })
@@ -195,17 +246,16 @@ export function CheckoutModal() {
     }
     window.addEventListener('beforeunload', handler)
     return () => window.removeEventListener('beforeunload', handler)
-  }, [checkoutOpen, submitted, items, form, total])
+  }, [checkoutOpen, submitted, items, total, contactInfo.name, contactInfo.email, contactInfo.phone])
 
-  if (!checkoutOpen) return null
+  if (!checkoutOpen || !user) return null
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
 
-    // Save final abandoned cart record before "completing"
     await saveAbandonedCart({
-      ...form,
+      ...contactInfo,
       cartItems: items.map(i => ({ slug: i.slug, title: i.title, price: i.price })),
       cartTotal: total,
     })
@@ -216,16 +266,15 @@ export function CheckoutModal() {
   }
 
   const handleClose = () => {
-    // If closing without submitting, save the lead as abandoned
     if (!submitted && items.length > 0) {
       saveAbandonedCart({
-        ...form,
+        ...contactInfo,
         cartItems: items.map(i => ({ slug: i.slug, title: i.title, price: i.price })),
         cartTotal: total,
       })
     }
     setSubmitted(false)
-    setForm({ name: '', email: '', phone: '', company: '' })
+    setCompany('')
     closeCheckout()
   }
 
@@ -294,6 +343,44 @@ export function CheckoutModal() {
             </div>
 
             <form onSubmit={handleSubmit} style={{ padding: '1.5rem 2rem' }}>
+              {/* Logged-in user info */}
+              <div style={{
+                display: 'flex', alignItems: 'center', gap: '0.75rem',
+                padding: '0.85rem 1rem', marginBottom: '1.25rem',
+                backgroundColor: 'rgba(70,162,57,0.06)', border: '1px solid rgba(70,162,57,0.15)',
+                borderRadius: '12px',
+              }}>
+                <div style={{
+                  width: 36, height: 36, borderRadius: '50%', flexShrink: 0,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  backgroundColor: 'rgba(70,162,57,0.15)', border: '1px solid rgba(70,162,57,0.25)',
+                }}>
+                  <User size={16} color="#46a239" />
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <p style={{
+                    fontFamily: 'Plus Jakarta Sans, sans-serif',
+                    fontSize: '0.82rem', fontWeight: 600, color: '#edf3ed',
+                    lineHeight: 1.3,
+                  }}>
+                    {profile?.full_name || 'Conta'}
+                  </p>
+                  <p style={{
+                    fontFamily: 'Space Mono, monospace',
+                    fontSize: '0.65rem', color: '#8f9c8f',
+                  }}>
+                    {user.email}
+                  </p>
+                </div>
+                <button type="button" onClick={signOut} title="Sair"
+                  style={{
+                    background: 'none', border: 'none', cursor: 'pointer',
+                    color: '#5a635a', flexShrink: 0,
+                  }}>
+                  <LogOut size={16} />
+                </button>
+              </div>
+
               {/* Cart summary */}
               <div style={{ marginBottom: '1.5rem' }}>
                 <p style={{
@@ -339,43 +426,57 @@ export function CheckoutModal() {
                 </div>
               </div>
 
-              {/* Contact form */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+              {/* Profile data summary */}
+              <div style={{ marginBottom: '1.5rem' }}>
                 <p style={{
                   fontFamily: 'Space Mono, monospace', fontSize: '0.6rem',
                   color: '#46a239', letterSpacing: '0.12em', textTransform: 'uppercase',
-                  marginBottom: '0.25rem',
+                  marginBottom: '0.75rem',
                 }}>
                   Seus Dados
                 </p>
+                <div style={{
+                  display: 'flex', flexDirection: 'column', gap: '0.4rem',
+                  padding: '1rem', backgroundColor: '#1a1f1a',
+                  border: '1px solid #2a2e2a', borderRadius: '12px',
+                }}>
+                  <InfoRow icon={<User size={13} />} label="Nome" value={profile?.full_name} />
+                  <InfoRow icon={<Mail size={13} />} label="E-mail" value={user.email} />
+                  <InfoRow icon={<Phone size={13} />} label="Telefone" value={profile?.phone} />
+                  <InfoRow icon={<CreditCardRow />} label="CPF" value={profile?.cpf} />
+                  <InfoRow icon={<MapPinRow />} label="CEP" value={profile?.cep} />
+                  <InfoRow icon={<BuildingRow />} label="Endereço" value={profile?.address} />
+                </div>
+              </div>
 
-                <FormInput
-                  icon={<User size={16} />}
-                  label="Nome completo *"
-                  value={form.name}
-                  onChange={v => setForm(f => ({ ...f, name: v }))}
-                  required
-                />
-                <FormInput
-                  icon={<Mail size={16} />}
-                  label="E-mail *"
-                  type="email"
-                  value={form.email}
-                  onChange={v => setForm(f => ({ ...f, email: v }))}
-                  required
-                />
-                <FormInput
-                  icon={<Phone size={16} />}
-                  label="Telefone / WhatsApp"
-                  value={form.phone}
-                  onChange={v => setForm(f => ({ ...f, phone: v }))}
-                />
-                <FormInput
-                  icon={<Building2 size={16} />}
-                  label="Empresa"
-                  value={form.company}
-                  onChange={v => setForm(f => ({ ...f, company: v }))}
-                />
+              {/* Company field (optional, not in profile) */}
+              <div>
+                <label style={{
+                  display: 'block', fontFamily: 'Plus Jakarta Sans, sans-serif',
+                  fontSize: '0.72rem', color: '#8f9c8f', marginBottom: '0.35rem',
+                }}>
+                  Empresa (opcional)
+                </label>
+                <div style={{
+                  display: 'flex', alignItems: 'center', gap: '0.6rem',
+                  backgroundColor: '#1a1f1a', border: '1px solid #2a2e2a',
+                  borderRadius: '10px', padding: '0 0.85rem',
+                  transition: 'border-color 0.2s',
+                }}>
+                  <span style={{ color: '#5a635a', flexShrink: 0 }}><Building2 size={16} /></span>
+                  <input
+                    type="text"
+                    value={company}
+                    onChange={e => setCompany(e.target.value)}
+                    style={{
+                      flex: 1, backgroundColor: 'transparent', border: 'none', outline: 'none',
+                      fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.85rem',
+                      color: '#edf3ed', padding: '0.7rem 0',
+                    }}
+                    onFocus={e => (e.currentTarget.parentElement!.style.borderColor = 'rgba(70,162,57,0.4)')}
+                    onBlur={e => (e.currentTarget.parentElement!.style.borderColor = '#2a2e2a')}
+                  />
+                </div>
               </div>
 
               <button type="submit" disabled={loading} style={{
@@ -408,45 +509,49 @@ export function CheckoutModal() {
   )
 }
 
-function FormInput({
-  icon, label, value, onChange, type = 'text', required = false,
-}: {
-  icon: React.ReactNode
-  label: string
-  value: string
-  onChange: (v: string) => void
-  type?: string
-  required?: boolean
-}) {
+function InfoRow({ icon, label, value }: { icon: React.ReactNode; label: string; value?: string | null }) {
   return (
-    <div>
-      <label style={{
-        display: 'block', fontFamily: 'Plus Jakarta Sans, sans-serif',
-        fontSize: '0.72rem', color: '#8f9c8f', marginBottom: '0.35rem',
+    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+      <span style={{ color: '#5a635a', flexShrink: 0, display: 'flex', alignItems: 'center' }}>{icon}</span>
+      <span style={{
+        fontFamily: 'Plus Jakarta Sans, sans-serif',
+        fontSize: '0.72rem', color: '#5a635a', flexShrink: 0, width: '4.5rem',
       }}>
         {label}
-      </label>
-      <div style={{
-        display: 'flex', alignItems: 'center', gap: '0.6rem',
-        backgroundColor: '#1a1f1a', border: '1px solid #2a2e2a',
-        borderRadius: '10px', padding: '0 0.85rem',
-        transition: 'border-color 0.2s',
+      </span>
+      <span style={{
+        fontFamily: 'Plus Jakarta Sans, sans-serif',
+        fontSize: '0.78rem', color: value ? '#c4d0c4' : '#5a635a',
+        fontStyle: value ? 'normal' : 'italic',
       }}>
-        <span style={{ color: '#5a635a', flexShrink: 0 }}>{icon}</span>
-        <input
-          type={type}
-          value={value}
-          required={required}
-          onChange={e => onChange(e.target.value)}
-          style={{
-            flex: 1, backgroundColor: 'transparent', border: 'none', outline: 'none',
-            fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.85rem',
-            color: '#edf3ed', padding: '0.7rem 0',
-          }}
-          onFocus={e => (e.currentTarget.parentElement!.style.borderColor = 'rgba(70,162,57,0.4)')}
-          onBlur={e => (e.currentTarget.parentElement!.style.borderColor = '#2a2e2a')}
-        />
-      </div>
+        {value || 'não informado'}
+      </span>
     </div>
+  )
+}
+
+function CreditCardRow() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <rect x="2" y="5" width="20" height="14" rx="2" />
+      <line x1="2" y1="10" x2="22" y2="10" />
+    </svg>
+  )
+}
+
+function MapPinRow() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+      <circle cx="12" cy="10" r="3" />
+    </svg>
+  )
+}
+
+function BuildingRow() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4" />
+    </svg>
   )
 }

@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ShoppingCart, Plus, Check } from 'lucide-react'
+import { ShoppingCart, Plus, Check, User as UserIcon, LogOut } from 'lucide-react'
 import { COURSES, CATEGORIES } from '@/data/courses'
 import { useCart, type CartItem } from '@/lib/cart'
+import { useAuth } from '@/lib/auth'
 
 function formatBRL(value: number): string {
   return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
@@ -404,6 +405,7 @@ function scrollTo(id: string) {
 export default function Academy() {
   const navigate = useNavigate()
   const { items, addToCart, openCart } = useCart()
+  const { user, profile, openAuthModal, signOut } = useAuth()
   const [activeCategory, setActiveCategory] = useState('Todos')
   const [hoveredCourse, setHoveredCourse] = useState<number | null>(null)
   const [activePath, setActivePath] = useState(1)
@@ -495,6 +497,50 @@ export default function Academy() {
                   {items.length}
                 </span>
               )}
+            </button>
+          )}
+          {user ? (
+            <div className="flex items-center gap-2">
+              <div style={{
+                display: 'flex', alignItems: 'center', gap: '0.4rem',
+                padding: '0.4rem 0.75rem',
+                border: '1px solid #3a3f3a', borderRadius: '8px',
+                cursor: 'default',
+              }}>
+                <div style={{
+                  width: 22, height: 22, borderRadius: '50%',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  backgroundColor: 'rgba(70,162,57,0.15)', border: '1px solid rgba(70,162,57,0.25)',
+                }}>
+                  <UserIcon size={12} color="#46a239" />
+                </div>
+                <span style={{
+                  fontFamily: 'Plus Jakarta Sans, sans-serif',
+                  fontSize: '0.78rem', color: '#c4d0c4', maxWidth: 120,
+                  overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                }}>
+                  {profile?.full_name?.split(' ')[0] || user.email?.split('@')[0]}
+                </span>
+                <button onClick={signOut} title="Sair" style={{
+                  background: 'none', border: 'none', cursor: 'pointer',
+                  color: '#5a635a', padding: 0, display: 'flex', alignItems: 'center',
+                }}>
+                  <LogOut size={14} />
+                </button>
+              </div>
+            </div>
+          ) : (
+            <button
+              onClick={() => openAuthModal('login')}
+              style={{
+                fontFamily: 'Plus Jakarta Sans, sans-serif',
+                fontSize: '0.8rem', fontWeight: 600,
+                color: '#edf3ed', padding: '0.5rem 1rem',
+                border: '1px solid #3a3f3a', borderRadius: '8px',
+                backgroundColor: 'transparent', cursor: 'pointer',
+              }}
+              className="hover:border-white/40 transition-colors">
+              Entrar
             </button>
           )}
           <button
