@@ -122,7 +122,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       provider: 'google',
       options: { redirectTo: window.location.origin },
     })
-    return { error: error ? translateOAuthError(error.message) : null }
+    return { error: error ? translateOAuthError(error.message, 'Google') : null }
   }, [])
 
   const signInWithOutlook = useCallback(async (): Promise<{ error: string | null }> => {
@@ -130,7 +130,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       provider: 'azure',
       options: { redirectTo: window.location.origin },
     })
-    return { error: error ? translateOAuthError(error.message) : null }
+    return { error: error ? translateOAuthError(error.message, 'Outlook') : null }
   }, [])
 
   const signOut = useCallback(async () => {
@@ -180,8 +180,8 @@ function translateError(msg: string): string {
   return msg
 }
 
-function translateOAuthError(msg: string): string {
-  if (msg.includes('provider is not enabled')) return 'O login com Google ainda não está ativado no Supabase.'
+function translateOAuthError(msg: string, provider: string): string {
+  if (msg.includes('provider is not enabled')) return `O login com ${provider} ainda não está ativado no Supabase.`
   if (msg.includes('redirect')) return 'O endereço de retorno do login não está autorizado no Supabase.'
-  return `Não foi possível iniciar o login com Google: ${msg}`
+  return `Não foi possível iniciar o login com ${provider}: ${msg}`
 }
