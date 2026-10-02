@@ -23,8 +23,8 @@ interface AuthContextValue {
   closeAuthModal: () => void
   signUp: (email: string, password: string, fullName: string, phone: string, cpf: string, address: string, cep: string) => Promise<{ error: string | null }>
   signIn: (email: string, password: string) => Promise<{ error: string | null }>
-  signInWithGoogle: () => Promise<void>
-  signInWithOutlook: () => Promise<void>
+  signInWithGoogle: () => Promise<{ error: string | null }>
+  signInWithOutlook: () => Promise<{ error: string | null }>
   signOut: () => Promise<void>
   updateProfile: (data: Partial<Profile>) => Promise<{ error: string | null }>
 }
@@ -117,18 +117,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { error: null }
   }, [])
 
-  const signInWithGoogle = useCallback(async () => {
-    await supabase.auth.signInWithOAuth({
+  const signInWithGoogle = useCallback(async (): Promise<{ error: string | null }> => {
+    const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: { redirectTo: window.location.origin },
     })
+    return { error: error ? translateOAuthError(error.message) : null }
   }, [])
 
-  const signInWithOutlook = useCallback(async () => {
-    await supabase.auth.signInWithOAuth({
+  const signInWithOutlook = useCallback(async (): Promise<{ error: string | null }> => {
+    const { error } = await supabase.auth.signInWithOAuth({
       provider: 'azure',
       options: { redirectTo: window.location.origin },
     })
+    return { error: error ? translateOAuthError(error.message) : null }
   }, [])
 
   const signOut = useCallback(async () => {
@@ -176,4 +178,10 @@ function translateError(msg: string): string {
   if (msg.includes('User already registered')) return 'Este e-mail já está cadastrado'
   if (msg.includes('Password should be at least')) return 'A senha deve ter pelo menos 6 caracteres'
   return msg
+}
+
+function translateOAuthError(msg: string): string {
+  if (msg.includes('provider is not enabled')) return 'O login com Google ainda não está ativado no Supabase.'
+  if (msg.includes('redirect')) return 'O endereço de retorno do login não está autorizado no Supabase.'
+  return `Não foi possível iniciar o login com Google: ${msg}`
 }

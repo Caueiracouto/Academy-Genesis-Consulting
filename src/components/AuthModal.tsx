@@ -68,7 +68,11 @@ export function AuthModal() {
     setOauthLoading('google')
     setError(null)
     try {
-      await signInWithGoogle()
+      const { error } = await signInWithGoogle()
+      if (error) {
+        setError(error)
+        setOauthLoading(null)
+      }
     } catch {
       setError('Erro ao conectar com Google')
       setOauthLoading(null)
@@ -79,7 +83,11 @@ export function AuthModal() {
     setOauthLoading('outlook')
     setError(null)
     try {
-      await signInWithOutlook()
+      const { error } = await signInWithOutlook()
+      if (error) {
+        setError(error)
+        setOauthLoading(null)
+      }
     } catch {
       setError('Erro ao conectar com Outlook')
       setOauthLoading(null)
