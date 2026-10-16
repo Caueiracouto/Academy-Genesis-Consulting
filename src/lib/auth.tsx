@@ -38,46 +38,48 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [authModalOpen, setAuthModalOpen] = useState(false)
   const [authModalMode, setAuthModalMode] = useState<'login' | 'signup'>('login')
 
-  const fetchProfile = useCallback(async (uid: string) => {
+  const fetchProfile = useCallback(async (currentUser: User) => {
     const { data } = await supabase
       .from('profiles')
       .select('*')
-      .eq('id', uid)
+      .eq('id', currentUser.id)
       .maybeSingle()
 
     if (data) {
       setProfile(data as Profile)
-    } else {
-      // Create a minimal profile if it doesn't exist (e.g., OAuth first login)
-      const newProfile = {
-        id: uid,
-        email: user?.email ?? null,
-        full_name: user?.user_metadata?.full_name ?? user?.user_metadata?.name ?? null,
-        avatar_url: user?.user_metadata?.avatar_url ?? user?.user_metadata?.picture ?? null,
-      }
-      const { data: created } = await supabase
-        .from('profiles')
-        .insert(newProfile)
-        .select('*')
-        .maybeSingle()
-      if (created) setProfile(created as Profile)
+      return
     }
-  }, [user])
+
+    const newProfile = {
+      id: currentUser.id,
+      email: currentUser.email ?? null,
+      full_name: currentUser.user_metadata?.full_name ?? currentUser.user_metadata?.name ?? null,
+      avatar_url: currentUser.user_metadata?.avatar_url ?? currentUser.user_metadata?.picture ?? null,
+    }
+    const { data: created } = await supabase
+      .from('profiles')
+      .insert(newProfile)
+      .select('*')
+      .maybeSingle()
+    if (created) setProfile(created as Profile)
+  }, [])
 
   useEffect(() => {
     let mounted = true
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (!mounted) return
       setUser(session?.user ?? null)
+      if (session?.user) await fetchProfile(session.user)
       setLoading(false)
     })
 
-    supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
       (async () => {
+        if (!mounted) return
         setUser(session?.user ?? null)
         if (session?.user) {
-          await fetchProfile(session.user.id)
+          await fetchProfile(session.user)
         } else {
           setProfile(null)
         }
@@ -85,7 +87,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       })()
     })
 
-    return () => { mounted = false }
+    return () => {
+      mounted = false
+      authListener.subscription.unsubscribe()
+    }
   }, [fetchProfile])
 
   const signUp = useCallback(async (
@@ -112,25 +117,37 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const signIn = useCallback(async (email: string, password: string): Promise<{ error: string | null }> => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
-    if (error) return { error: translateError(error.message) }
-    return { error: null }
+    try {
+      const { error } = await supabase.auth.signInWithPassword({ email, password })
+      if (error) return { error: translateError(error.message) }
+      return { error: null }
+    } catch {
+      return { error: 'Não foi possível acessar o serviço de login. Verifique sua conexão e tente novamente.' }
+    }
   }, [])
 
   const signInWithGoogle = useCallback(async (): Promise<{ error: string | null }> => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo: window.location.origin },
-    })
-    return { error: error ? translateOAuthError(error.message, 'Google') : null }
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: { redirectTo: window.location.origin },
+      })
+      return { error: error ? translateOAuthError(error.message, 'Google') : null }
+    } catch {
+      return { error: 'Não foi possível abrir o login do Google. Verifique a conexão com o serviço e tente novamente.' }
+    }
   }, [])
 
   const signInWithOutlook = useCallback(async (): Promise<{ error: string | null }> => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'azure',
-      options: { redirectTo: window.location.origin },
-    })
-    return { error: error ? translateOAuthError(error.message, 'Outlook') : null }
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'azure',
+        options: { redirectTo: window.location.origin },
+      })
+      return { error: error ? translateOAuthError(error.message, 'Outlook') : null }
+    } catch {
+      return { error: 'Não foi possível abrir o login do Outlook. Verifique a conexão com o serviço e tente novamente.' }
+    }
   }, [])
 
   const signOut = useCallback(async () => {
@@ -177,6 +194,7 @@ function translateError(msg: string): string {
   if (msg.includes('Invalid login credentials')) return 'E-mail ou senha incorretos'
   if (msg.includes('User already registered')) return 'Este e-mail já está cadastrado'
   if (msg.includes('Password should be at least')) return 'A senha deve ter pelo menos 6 caracteres'
+  if (msg.includes('Failed to fetch') || msg.includes('NetworkError')) return 'Não foi possível conectar ao serviço de login. Verifique sua conexão e tente novamente.'
   return msg
 }
 
