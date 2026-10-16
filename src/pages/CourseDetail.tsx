@@ -281,12 +281,9 @@ export default function CourseDetail() {
                   <span style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '1.75rem', fontWeight: 700, color: '#46a239', letterSpacing: '-0.02em' }}>
                     {formatBRL(course.price)}
                   </span>
-                  <span style={{ fontFamily: 'Space Mono, monospace', fontSize: '0.78rem', color: '#5a635a', textDecoration: 'line-through', marginBottom: '0.3rem' }}>
-                    {formatBRL(course.marketPrice)}
-                  </span>
                 </div>
                 <p style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.72rem', color: '#8f9c8f', lineHeight: 1.4 }}>
-                  {formatBRL(course.marketPrice - course.price)} de desconto · pagamento em Pix, boleto ou 12x
+                  Pagamento em Pix, boleto ou 12x
                 </p>
               </div>
               <button

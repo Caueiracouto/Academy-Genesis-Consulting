@@ -929,9 +929,6 @@ export default function Academy() {
                     <span style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '1.25rem', fontWeight: 700, color: '#edf3ed', letterSpacing: '-0.01em' }}>
                       {formatBRL(course.price)}
                     </span>
-                    <span style={{ fontFamily: 'Space Mono, monospace', fontSize: '0.7rem', color: '#5a635a', textDecoration: 'line-through', marginBottom: '0.2rem' }}>
-                      {formatBRL(course.marketPrice)}
-                    </span>
                   </div>
 
                   <div className="flex items-center justify-between mt-auto pt-4" style={{ borderTop: '1px solid #2a2e2a' }}>
