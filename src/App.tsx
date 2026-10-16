@@ -7,6 +7,7 @@ import { CartProvider } from '@/lib/cart'
 import { AuthProvider } from '@/lib/auth'
 import { CartDrawer, CheckoutModal } from '@/components/CartUI'
 import { AuthModal } from '@/components/AuthModal'
+import { NemotronChat } from '@/components/NemotronChat'
 import { trackPageVisit } from '@/lib/tracking'
 
 export default function App() {
@@ -29,6 +30,7 @@ export default function App() {
         <CartDrawer />
         <CheckoutModal />
         <AuthModal />
+        <NemotronChat />
       </CartProvider>
     </AuthProvider>
   )
