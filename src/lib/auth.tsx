@@ -23,8 +23,6 @@ interface AuthContextValue {
   closeAuthModal: () => void
   signUp: (email: string, password: string, fullName: string, phone: string, cpf: string, address: string, cep: string) => Promise<{ error: string | null }>
   signIn: (email: string, password: string) => Promise<{ error: string | null }>
-  signInWithGoogle: () => Promise<{ error: string | null }>
-  signInWithOutlook: () => Promise<{ error: string | null }>
   signOut: () => Promise<void>
   updateProfile: (data: Partial<Profile>) => Promise<{ error: string | null }>
 }
@@ -126,30 +124,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [])
 
-  const signInWithGoogle = useCallback(async (): Promise<{ error: string | null }> => {
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: { redirectTo: window.location.origin },
-      })
-      return { error: error ? translateOAuthError(error.message, 'Google') : null }
-    } catch {
-      return { error: 'Não foi possível abrir o login do Google. Verifique a conexão com o serviço e tente novamente.' }
-    }
-  }, [])
-
-  const signInWithOutlook = useCallback(async (): Promise<{ error: string | null }> => {
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'azure',
-        options: { redirectTo: window.location.origin },
-      })
-      return { error: error ? translateOAuthError(error.message, 'Outlook') : null }
-    } catch {
-      return { error: 'Não foi possível abrir o login do Outlook. Verifique a conexão com o serviço e tente novamente.' }
-    }
-  }, [])
-
   const signOut = useCallback(async () => {
     await supabase.auth.signOut()
     setUser(null)
@@ -178,7 +152,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     user, profile, loading,
     authModalOpen, authModalMode,
     openAuthModal, closeAuthModal,
-    signUp, signIn, signInWithGoogle, signInWithOutlook, signOut, updateProfile,
+    signUp, signIn, signOut, updateProfile,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
@@ -196,10 +170,4 @@ function translateError(msg: string): string {
   if (msg.includes('Password should be at least')) return 'A senha deve ter pelo menos 6 caracteres'
   if (msg.includes('Failed to fetch') || msg.includes('NetworkError')) return 'Não foi possível conectar ao serviço de login. Verifique sua conexão e tente novamente.'
   return msg
-}
-
-function translateOAuthError(msg: string, provider: string): string {
-  if (msg.includes('provider is not enabled')) return `O login com ${provider} ainda não está ativado no Supabase.`
-  if (msg.includes('redirect')) return 'O endereço de retorno do login não está autorizado no Supabase.'
-  return `Não foi possível iniciar o login com ${provider}: ${msg}`
 }
