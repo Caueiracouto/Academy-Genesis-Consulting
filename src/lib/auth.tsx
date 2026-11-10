@@ -11,12 +11,14 @@ export interface Profile {
   address: string | null
   cep: string | null
   avatar_url: string | null
+  role: string | null
 }
 
 interface AuthContextValue {
   user: User | null
   profile: Profile | null
   loading: boolean
+  isAdmin: boolean
   authModalOpen: boolean
   authModalMode: 'login' | 'signup'
   openAuthModal: (mode?: 'login' | 'signup') => void
@@ -150,6 +152,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const value: AuthContextValue = {
     user, profile, loading,
+    isAdmin: profile?.role === 'admin',
     authModalOpen, authModalMode,
     openAuthModal, closeAuthModal,
     signUp, signIn, signOut, updateProfile,

@@ -1,9 +1,39 @@
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ShoppingCart, Plus, Check, User as UserIcon, LogOut } from 'lucide-react'
+import { ShoppingCart, Plus, Check, User as UserIcon, LogOut, Calendar as CalendarIcon, Clock, ChevronDown, ArrowRight } from 'lucide-react'
 import { COURSES, CATEGORIES } from '@/data/courses'
 import { useCart, type CartItem } from '@/lib/cart'
 import { useAuth } from '@/lib/auth'
+import { supabase } from '@/lib/supabase'
+
+interface CourseSession {
+  id: string
+  course_slug: string
+  course_title: string
+  cert_code: string
+  instructor: string | null
+  start_date: string
+  end_date: string
+  start_time: string | null
+  end_time: string | null
+  sessions: string | null
+  format: string | null
+  seats_total: number
+  seats_filled: number
+  status: string
+}
+
+const MONTHS = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
+
+function formatSessionDate(start: string, end: string): string {
+  const s = new Date(start + 'T00:00:00')
+  const e = new Date(end + 'T00:00:00')
+  if (s.getMonth() === e.getMonth()) {
+    if (s.getDate() === e.getDate()) return `${s.getDate()} ${MONTHS[s.getMonth()]}`
+    return `${s.getDate()}–${e.getDate()} ${MONTHS[s.getMonth()]}`
+  }
+  return `${s.getDate()} ${MONTHS[s.getMonth()]} – ${e.getDate()} ${MONTHS[e.getMonth()]}`
+}
 
 function formatBRL(value: number | undefined | null): string {
   if (value == null || isNaN(value)) return '—'
@@ -410,7 +440,23 @@ export default function Academy() {
   const [activeCategory, setActiveCategory] = useState('Todos')
   const [hoveredCourse, setHoveredCourse] = useState<number | null>(null)
   const [activePath, setActivePath] = useState(1)
+  const [menuMoreOpen, setMenuMoreOpen] = useState(false)
+  const [upcomingSessions, setUpcomingSessions] = useState<CourseSession[]>([])
   const pathsRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    async function fetchUpcoming() {
+      const today = new Date().toISOString().slice(0, 10)
+      const { data } = await supabase
+        .from('course_sessions')
+        .select('*')
+        .gte('start_date', today)
+        .order('start_date', { ascending: true })
+        .limit(4)
+      if (data) setUpcomingSessions(data as CourseSession[])
+    }
+    fetchUpcoming()
+  }, [])
 
   const inCart = (slug: string) => items.some(i => i.slug === slug)
 
@@ -447,20 +493,49 @@ export default function Academy() {
             </span>
           </div>
         </div>
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-7">
+          <button onClick={() => navigate('/calendario')}
+            style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.85rem', fontWeight: 500, color: '#8f9c8f', letterSpacing: '0.02em', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+            className="hover:text-white transition-colors">Calendário</button>
           {[
             { label: 'Trilhas', id: 'trilhas' },
             { label: 'Cursos', id: 'cursos' },
-            { label: 'Certificações', id: 'certificacoes' },
-            { label: 'Parceria', id: 'parceria' },
-            { label: 'Instrutores', id: 'instrutores' },
-            { label: 'Comparativo', id: 'comparativo' },
-            { label: 'Clientes', id: 'clientes' },
           ].map(item => (
-            <button key={item.label} onClick={() => scrollTo(item.id)}
+            <button key={item.label} onClick={() => item.id && scrollTo(item.id)}
               style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.85rem', fontWeight: 500, color: '#8f9c8f', letterSpacing: '0.02em', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
               className="hover:text-white transition-colors">{item.label}</button>
           ))}
+          <div style={{ position: 'relative' }}>
+            <button onClick={() => setMenuMoreOpen(v => !v)}
+              style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.85rem', fontWeight: 500, color: menuMoreOpen ? '#edf3ed' : '#8f9c8f', letterSpacing: '0.02em', background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center', gap: '0.25rem' }}
+              className="hover:text-white transition-colors">
+              Mais
+              <ChevronDown size={14} style={{ transition: 'transform 0.2s', transform: menuMoreOpen ? 'rotate(180deg)' : 'none' }} />
+            </button>
+            {menuMoreOpen && (
+              <>
+                <div onClick={() => setMenuMoreOpen(false)} style={{ position: 'fixed', inset: 0, zIndex: 40 }} />
+                <div style={{
+                  position: 'absolute', top: 'calc(100% + 0.5rem)', right: 0, zIndex: 41,
+                  backgroundColor: '#0d130d', border: '1px solid #2a2e2a', borderRadius: '12px',
+                  padding: '0.4rem', minWidth: 180, boxShadow: '0 20px 50px rgba(0,0,0,0.5)',
+                  display: 'flex', flexDirection: 'column', gap: '0.1rem',
+                }}>
+                  {[
+                    { label: 'Certificações', id: 'certificacoes' },
+                    { label: 'Parceria', id: 'parceria' },
+                    { label: 'Instrutores', id: 'instrutores' },
+                    { label: 'Comparativo', id: 'comparativo' },
+                    { label: 'Clientes', id: 'clientes' },
+                  ].map(item => (
+                    <button key={item.label} onClick={() => { item.id && scrollTo(item.id); setMenuMoreOpen(false) }}
+                      style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.82rem', fontWeight: 500, color: '#8f9c8f', background: 'none', border: 'none', cursor: 'pointer', padding: '0.55rem 0.8rem', textAlign: 'left', borderRadius: '8px' }}
+                      className="hover:text-white hover:bg-white/5 transition-all">{item.label}</button>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
         </div>
         <div className="flex items-center gap-3">
           {items.length > 0 && (
@@ -622,6 +697,92 @@ export default function Academy() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* CALENDAR PREVIEW */}
+      <section id="calendario-preview" className="py-16 px-8" style={{ borderTop: '1px solid #2a2e2a' }}>
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-end justify-between flex-wrap gap-6 mb-10">
+            <div>
+              <span style={{ fontFamily: 'Space Mono, monospace', fontSize: '0.7rem', letterSpacing: '0.18em', color: '#46a239', textTransform: 'uppercase', display: 'block', marginBottom: '0.75rem' }}>
+                Próximas turmas
+              </span>
+              <h2 style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: 'clamp(1.6rem, 3.5vw, 2.4rem)', fontWeight: 700, lineHeight: 1.15, letterSpacing: '-0.02em' }}>
+                Calendário de <span style={{ color: '#46a239' }}>treinamentos</span>
+              </h2>
+            </div>
+            <button onClick={() => navigate('/calendario')}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.8rem', fontWeight: 600, color: '#46a239', background: 'none', border: '1px solid rgba(70,162,57,0.35)', borderRadius: '10px', padding: '0.55rem 1.1rem', cursor: 'pointer' }}
+              className="hover:bg-green-500/10 hover:border-green-400/60 transition-all">
+              Ver calendário completo
+              <ArrowRight size={15} />
+            </button>
+          </div>
+
+          {upcomingSessions.length === 0 ? (
+            <div className="flex items-center gap-3 p-6" style={{ border: '1px solid #2a2e2a', borderRadius: '16px', backgroundColor: '#0d130d' }}>
+              <CalendarIcon size={20} color="#5a635a" />
+              <p style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.85rem', color: '#5a635a', lineHeight: 1.6 }}>
+                Nenhuma turma programada no momento. Entre em contato para agendar um treinamento.
+              </p>
+            </div>
+          ) : (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {upcomingSessions.map(session => {
+                const seatsLeft = Math.max(0, session.seats_total - session.seats_filled)
+                const isFull = seatsLeft === 0
+                const course = COURSES.find(c => c.slug === session.course_slug)
+                return (
+                  <div key={session.id}
+                    onClick={() => course && navigate(`/treinamento/${course.slug}`)}
+                    style={{ border: '1px solid #2a2e2a', backgroundColor: '#0d130d', borderRadius: '16px', overflow: 'hidden', transition: 'all 0.2s', cursor: course ? 'pointer' : 'default' }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(70,162,57,0.3)'; (e.currentTarget as HTMLDivElement).style.backgroundColor = '#131a13' }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = '#2a2e2a'; (e.currentTarget as HTMLDivElement).style.backgroundColor = '#0d130d' }}>
+                    <div className="flex items-center gap-3 px-5 pt-5">
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: 'rgba(70,162,57,0.08)', border: '1px solid rgba(70,162,57,0.2)', borderRadius: '10px', padding: '0.5rem 0.75rem', minWidth: 52 }}>
+                        <span style={{ fontFamily: 'Space Mono, monospace', fontSize: '0.52rem', color: '#46a239', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                          {MONTHS[new Date(session.start_date + 'T00:00:00').getMonth()]}
+                        </span>
+                        <span style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '1.3rem', fontWeight: 700, color: '#edf3ed', lineHeight: 1.1 }}>
+                          {new Date(session.start_date + 'T00:00:00').getDate()}
+                        </span>
+                      </div>
+                      <div className="flex flex-col gap-1" style={{ minWidth: 0 }}>
+                        <span style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.66rem', fontWeight: 700, color: '#46a239', letterSpacing: '0.04em', padding: '0.12rem 0.45rem', backgroundColor: 'rgba(70,162,57,0.08)', border: '1px solid rgba(70,162,57,0.2)', borderRadius: '6px', display: 'inline-block', width: 'fit-content' }}>
+                          {session.cert_code}
+                        </span>
+                        <span style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.82rem', fontWeight: 600, color: '#edf3ed', lineHeight: 1.3, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          {session.course_title}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex flex-col gap-2 px-5 pt-3 pb-4">
+                      <div className="flex items-center gap-2">
+                        <CalendarIcon size={12} color="#5a635a" />
+                        <span style={{ fontFamily: 'Space Mono, monospace', fontSize: '0.65rem', color: '#8f9c8f' }}>
+                          {formatSessionDate(session.start_date, session.end_date)}
+                        </span>
+                      </div>
+                      {session.start_time && (
+                        <div className="flex items-center gap-2">
+                          <Clock size={12} color="#5a635a" />
+                          <span style={{ fontFamily: 'Space Mono, monospace', fontSize: '0.65rem', color: '#8f9c8f' }}>
+                            {session.start_time}{session.end_time ? `–${session.end_time}` : ''}
+                          </span>
+                        </div>
+                      )}
+                      <div className="flex items-center gap-2 mt-1">
+                        <span style={{ fontFamily: 'Space Mono, monospace', fontSize: '0.6rem', color: isFull ? '#5a635a' : '#46a239', fontWeight: 600 }}>
+                          {isFull ? 'Lotado' : `${seatsLeft} vagas`}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          )}
         </div>
       </section>
 

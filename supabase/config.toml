@@ -1,0 +1,2 @@
+[functions.send-enrollment-email]
+verify_jwt = false

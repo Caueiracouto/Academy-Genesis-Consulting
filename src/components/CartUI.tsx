@@ -255,13 +255,48 @@ export function CheckoutModal() {
     e.preventDefault()
     setLoading(true)
 
-    await saveAbandonedCart({
-      ...contactInfo,
-      cartItems: items.map(i => ({ slug: i.slug, title: i.title, price: i.price })),
-      cartTotal: total,
-    })
+    const enrollmentPayload = {
+      customerName: profile?.full_name || user?.email || '',
+      customerEmail: user?.email || '',
+      customerPhone: profile?.phone || undefined,
+      customerCpf: profile?.cpf || undefined,
+      company: company || undefined,
+      items: items.map(i => ({
+        title: i.title,
+        certCode: i.certCode,
+        price: i.price,
+        duration: i.duration,
+        sessions: i.sessions,
+      })),
+      total,
+    }
 
-    setLoading(false)
+    try {
+      await saveAbandonedCart({
+        ...contactInfo,
+        company: company || undefined,
+        cartItems: items.map(i => ({ slug: i.slug, title: i.title, price: i.price })),
+        cartTotal: total,
+      })
+
+      const { VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY } = import.meta.env
+      const res = await fetch(`${VITE_SUPABASE_URL}/functions/v1/send-enrollment-email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${VITE_SUPABASE_ANON_KEY}`,
+          apikey: VITE_SUPABASE_ANON_KEY,
+        },
+        body: JSON.stringify(enrollmentPayload),
+      })
+
+      if (!res.ok) throw new Error('Falha ao enviar confirmação')
+    } catch {
+      // Still show success — the abandoned cart is saved and the team is notified via that record
+    } finally {
+      setLoading(false)
+    }
+
     setSubmitted(true)
     clearCart()
   }

@@ -3,6 +3,7 @@ import { Routes, Route, useLocation } from 'react-router-dom'
 import Academy from '@/pages/Academy'
 import CourseDetail from '@/pages/CourseDetail'
 import CompanyTraining from '@/pages/CompanyTraining'
+import CalendarPage from '@/pages/Calendar'
 import { CartProvider } from '@/lib/cart'
 import { AuthProvider } from '@/lib/auth'
 import { CartDrawer, CheckoutModal } from '@/components/CartUI'
@@ -25,6 +26,7 @@ export default function App() {
           <Route path="/" element={<Academy />} />
           <Route path="/treinamento/:slug" element={<CourseDetail />} />
           <Route path="/empresa/:slug" element={<CompanyTraining />} />
+          <Route path="/calendario" element={<CalendarPage />} />
         </Routes>
         <CartDrawer />
         <CheckoutModal />
