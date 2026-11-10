@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Calendar as CalendarIcon, Clock, Users, User, ArrowRight, ChevronLeft, MapPin, Plus, Pencil, Trash2, X, Save, Settings } from 'lucide-react'
+import { Calendar as CalendarIcon, Clock, Users, User, ArrowRight, ChevronLeft, MapPin, Plus, Pencil, Trash2, X, Save, Settings, CheckSquare, Square } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { useCart, type CartItem } from '@/lib/cart'
 import { useAuth } from '@/lib/auth'
@@ -540,6 +540,40 @@ function AdminPanel({ sessions, loading, onRefresh, adminOpen, setAdminOpen }: A
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
+  const [confirmBulkDelete, setConfirmBulkDelete] = useState(false)
+  const [bulkDeleting, setBulkDeleting] = useState(false)
+
+  const toggleSelect = (id: string) => {
+    setSelectedIds(prev => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  }
+
+  const toggleSelectAll = () => {
+    if (selectedIds.size === sessions.length) {
+      setSelectedIds(new Set())
+    } else {
+      setSelectedIds(new Set(sessions.map(s => s.id)))
+    }
+  }
+
+  const handleBulkDelete = async () => {
+    setBulkDeleting(true)
+    const ids = Array.from(selectedIds)
+    const res = await supabase.from('course_sessions').delete().in('id', ids)
+    setBulkDeleting(false)
+    if (res.error) {
+      setError('Não foi possível excluir as turmas selecionadas.')
+      return
+    }
+    setSelectedIds(new Set())
+    setConfirmBulkDelete(false)
+    await onRefresh()
+  }
 
   const startEdit = (s: CourseSession) => {
     setEditing(true)
@@ -684,9 +718,39 @@ function AdminPanel({ sessions, loading, onRefresh, adminOpen, setAdminOpen }: A
           <p style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.85rem', color: '#5a635a' }}>Nenhuma turma cadastrada. Clique em "Nova turma" para adicionar.</p>
         ) : (
           <div className="flex flex-col gap-2">
-            {sessions.map(s => (
+            {/* Bulk actions bar */}
+            <div className="flex items-center justify-between flex-wrap gap-3 mb-1"
+              style={{ padding: '0.6rem 1rem', backgroundColor: 'rgba(70,162,57,0.04)', border: '1px solid rgba(70,162,57,0.12)', borderRadius: '12px' }}>
+              <button onClick={toggleSelectAll}
+                style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'none', border: 'none', cursor: 'pointer', color: selectedIds.size === sessions.length && sessions.length > 0 ? '#46a239' : '#8f9c8f', fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.78rem', fontWeight: 600 }}>
+                {selectedIds.size === sessions.length && sessions.length > 0 ? <CheckSquare size={16} /> : <Square size={16} />}
+                {selectedIds.size === sessions.length && sessions.length > 0 ? 'Desmarcar tudo' : 'Selecionar tudo'}
+              </button>
+              {selectedIds.size > 0 && (
+                <div className="flex items-center gap-3">
+                  <span style={{ fontFamily: 'Space Mono, monospace', fontSize: '0.65rem', color: '#46a239' }}>
+                    {selectedIds.size} selecionada{selectedIds.size > 1 ? 's' : ''}
+                  </span>
+                  <button onClick={() => setConfirmBulkDelete(true)}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase', backgroundColor: 'rgba(200,60,60,0.12)', color: '#e08080', padding: '0.45rem 0.9rem', borderRadius: '8px', border: '1px solid rgba(200,60,60,0.25)', cursor: 'pointer' }}
+                    className="hover:bg-red-600/20 hover:border-red-400/50 transition-all">
+                    <Trash2 size={14} />
+                    Excluir selecionadas
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {sessions.map(s => {
+              const isSelected = selectedIds.has(s.id)
+              return (
               <div key={s.id} className="flex items-center gap-3 flex-wrap"
-                style={{ padding: '0.7rem 1rem', backgroundColor: '#0d130d', border: '1px solid #2a2e2a', borderRadius: '12px' }}>
+                style={{ padding: '0.7rem 1rem', backgroundColor: isSelected ? 'rgba(200,60,60,0.04)' : '#0d130d', border: `1px solid ${isSelected ? 'rgba(200,60,60,0.25)' : '#2a2e2a'}`, borderRadius: '12px', transition: 'all 0.15s' }}>
+                <button onClick={() => toggleSelect(s.id)} title={isSelected ? 'Desmarcar' : 'Selecionar'}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: isSelected ? '#e08080' : '#5a635a', display: 'flex', alignItems: 'center', padding: 0, flexShrink: 0 }}
+                  className="hover:text-red-400 transition-colors">
+                  {isSelected ? <CheckSquare size={18} /> : <Square size={18} />}
+                </button>
                 <span style={{ fontFamily: 'Space Mono, monospace', fontSize: '0.65rem', fontWeight: 700, color: '#46a239', padding: '0.2rem 0.5rem', backgroundColor: 'rgba(70,162,57,0.08)', border: '1px solid rgba(70,162,57,0.2)', borderRadius: '6px', flexShrink: 0 }}>
                   {s.cert_code}
                 </span>
@@ -712,8 +776,38 @@ function AdminPanel({ sessions, loading, onRefresh, adminOpen, setAdminOpen }: A
                   </button>
                 </div>
               </div>
-            ))}
+              )
+            })}
           </div>
+        )}
+
+        {/* Confirm bulk delete dialog */}
+        {confirmBulkDelete && (
+          <>
+            <div onClick={() => setConfirmBulkDelete(false)} style={{ position: 'fixed', inset: 0, zIndex: 200, backgroundColor: 'rgba(0,0,0,0.6)' }} />
+            <div style={{
+              position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 201,
+              backgroundColor: '#0d130d', border: '1px solid #2a2e2a', borderRadius: '16px',
+              padding: '2rem', width: '100%', maxWidth: 380, boxShadow: '0 30px 60px rgba(0,0,0,0.5)',
+            }}>
+              <h3 style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '1.1rem', fontWeight: 700, color: '#edf3ed', marginBottom: '0.75rem' }}>
+                Excluir {selectedIds.size} turma{selectedIds.size > 1 ? 's' : ''}?
+              </h3>
+              <p style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.82rem', color: '#8f9c8f', lineHeight: 1.6, marginBottom: '1.5rem' }}>
+                Esta ação não pode ser desfeita. Todas as {selectedIds.size} turma{selectedIds.size > 1 ? 's selecionadas' : ' selecionada'} serão removidas do calendário permanentemente.
+              </p>
+              <div className="flex gap-2">
+                <button onClick={() => setConfirmBulkDelete(false)}
+                  style={{ flex: 1, fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.8rem', fontWeight: 600, color: '#8f9c8f', padding: '0.6rem', borderRadius: '10px', border: '1px solid #2a2e2a', backgroundColor: 'transparent', cursor: 'pointer' }}
+                  className="hover:border-white/40 transition-all">Cancelar</button>
+                <button onClick={handleBulkDelete} disabled={bulkDeleting}
+                  style={{ flex: 1, fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.8rem', fontWeight: 700, color: '#fff', padding: '0.6rem', borderRadius: '10px', border: 'none', backgroundColor: '#c04040', cursor: 'pointer', opacity: bulkDeleting ? 0.6 : 1 }}
+                  className="hover:bg-red-600 transition-colors">
+                  {bulkDeleting ? 'Excluindo...' : `Excluir ${selectedIds.size}`}
+                </button>
+              </div>
+            </div>
+          </>
         )}
 
         {/* Confirm delete dialog */}
