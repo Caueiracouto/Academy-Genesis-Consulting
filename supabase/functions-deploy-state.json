@@ -1,0 +1,9 @@
+{
+  "projectId": "70081020",
+  "functions": {
+    "send-enrollment-email": {
+      "hasChanged": false,
+      "hash": "2d2db4b812fa95226d3b37a2dec2027fd58f3888eddb26a76c71afc6932daf65"
+    }
+  }
+}
