@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Calendar as CalendarIcon, Clock, Users, User, ArrowRight, ChevronLeft, MapPin, Plus, Pencil, Trash2, X, Save, Settings, CheckSquare, Square } from 'lucide-react'
+import { Calendar as CalendarIcon, Clock, Users, User, ArrowRight, ChevronLeft, MapPin, Plus, Pencil, Trash2, X, Save, Settings, CheckSquare, Square, Copy } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { useCart, type CartItem } from '@/lib/cart'
 import { useAuth } from '@/lib/auth'
@@ -604,6 +604,28 @@ function AdminPanel({ sessions, loading, onRefresh, adminOpen, setAdminOpen }: A
     setError('')
   }
 
+  const startDuplicate = (s: CourseSession) => {
+    setEditing(false)
+    setForm({
+      id: null,
+      course_slug: s.course_slug,
+      course_title: s.course_title,
+      cert_code: s.cert_code,
+      instructor: s.instructor || '',
+      start_date: '',
+      end_date: '',
+      start_time: s.start_time || '',
+      end_time: s.end_time || '',
+      sessions: s.sessions || '',
+      format: s.format || 'Live Virtual',
+      seats_total: s.seats_total,
+      seats_filled: 0,
+      status: 'open',
+    })
+    setAdminOpen(true)
+    setError('')
+  }
+
   const onCourseSelect = (slug: string) => {
     const course = COURSES.find(c => c.slug === slug)
     if (course) {
@@ -769,6 +791,11 @@ function AdminPanel({ sessions, loading, onRefresh, adminOpen, setAdminOpen }: A
                     className="hover:border-white/40 hover:text-white transition-all">
                     <Pencil size={14} />
                   </button>
+                  <button onClick={() => startDuplicate(s)} title="Duplicar turma"
+                    style={{ background: 'none', border: '1px solid #2a2e2a', borderRadius: '8px', padding: '0.35rem', cursor: 'pointer', color: '#8f9c8f', display: 'flex', alignItems: 'center' }}
+                    className="hover:border-white/40 hover:text-white transition-all">
+                    <Copy size={14} />
+                  </button>
                   <button onClick={() => setConfirmDelete(s.id)} title="Excluir"
                     style={{ background: 'none', border: '1px solid rgba(200,60,60,0.25)', borderRadius: '8px', padding: '0.35rem', cursor: 'pointer', color: '#a06060', display: 'flex', alignItems: 'center' }}
                     className="hover:border-red-400/60 hover:text-red-400 transition-all">
@@ -850,7 +877,7 @@ function AdminPanel({ sessions, loading, onRefresh, adminOpen, setAdminOpen }: A
           }}>
             <div className="flex items-center justify-between" style={{ padding: '1.25rem 1.75rem', borderBottom: '1px solid #2a2e2a' }}>
               <h3 style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '1.1rem', fontWeight: 700, color: '#edf3ed' }}>
-                {editing ? 'Editar turma' : 'Nova turma'}
+                {editing ? 'Editar turma' : form.course_slug && !form.start_date ? 'Duplicar turma' : 'Nova turma'}
               </h3>
               <button onClick={() => setAdminOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8f9c8f' }}>
                 <X size={20} />
